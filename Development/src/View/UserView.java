@@ -6,6 +6,7 @@ package View;
 import Model.PCComponent;
 import java.util.LinkedList;
 import javax.swing.table.DefaultTableModel;
+import View.Login;
 
 
 
@@ -73,6 +74,11 @@ public class UserView extends javax.swing.JFrame {
         jLabel1.setText("PC Component Management System");
 
         LogOutButton.setText("LogOut");
+        LogOutButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                LogOutButtonActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -328,6 +334,15 @@ public class UserView extends javax.swing.JFrame {
         SmartPanel.repaint();
         SmartPanel.revalidate();
     }//GEN-LAST:event_AboutUsActionPerformed
+
+    private void LogOutButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LogOutButtonActionPerformed
+        // TODO add your handling code here:
+        Login log = new Login();
+        log.setVisible(true);
+
+    // Close current UserView JFrame
+    this.dispose();
+    }//GEN-LAST:event_LogOutButtonActionPerformed
 
     /**
      * @param args the command line arguments
