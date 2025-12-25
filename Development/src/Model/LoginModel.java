@@ -10,6 +10,7 @@ package Model;
  */
 public class LoginModel {
     
+    
     private final String adminUsername = "admin";
     private final String adminPassword = "admin123";
 

@@ -3,32 +3,31 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package View;
+
+import Controller.PCComponentController;
 import Model.PCComponent;
 import java.util.LinkedList;
 import javax.swing.table.DefaultTableModel;
 import View.Login;
-
-
 
 /**
  *
  * @author sonamchhiringsherpa
  */
 public class UserView extends javax.swing.JFrame {
-    private LinkedList<PCComponent> components = new LinkedList<>();
+
+    LinkedList<PCComponent> components = PCComponent.getComponents();
+
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(UserView.class.getName());
-    
+
     /**
      * Creates new form UserView
      */
     public UserView() {
-        initComponents();  
-        initDummyData();
+        initComponents();
+        PCComponent.initDummyData();
         loadTable();
     }
-    
-
-   
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -316,7 +315,7 @@ public class UserView extends javax.swing.JFrame {
         SmartPanel.add(ComponentsPanel);
         SmartPanel.repaint();
         SmartPanel.revalidate();
-        
+
     }//GEN-LAST:event_ComponentsActionPerformed
 
     private void HomeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_HomeActionPerformed
@@ -336,16 +335,14 @@ public class UserView extends javax.swing.JFrame {
     }//GEN-LAST:event_AboutUsActionPerformed
 
     private void LogOutButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LogOutButtonActionPerformed
-<<<<<<< HEAD
+
         // TODO add your handling code here:
         Login log = new Login();
         log.setVisible(true);
 
-    // Close current UserView JFrame
-    this.dispose();
-=======
-        this.dispose();        // TODO add your handling code here:
->>>>>>> cc176e226729b500b58dd9b7f018a5713f338d9c
+        // Close current UserView JFrame
+        this.setVisible(false);
+
     }//GEN-LAST:event_LogOutButtonActionPerformed
 
     /**
@@ -368,35 +365,26 @@ public class UserView extends javax.swing.JFrame {
             logger.log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
-    
+
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(() -> new UserView().setVisible(true));
     }
-    private void initDummyData() {
-    components.add(new PCComponent("Ryzen 5 5600X", "CPU", "Available",2 ,250.0, "images/cpu1.png"));
-    components.add(new PCComponent("RTX 3060", "GPU", "Available",3, 400.0, "images/gpu1.png"));
-    components.add(new PCComponent("B550M", "Motherboard", "Out of Stock",4, 150.0, "images/mb1.png"));
-    components.add(new PCComponent("16GB DDR4", "RAM", "Available",7, 70.0, "images/ram1.png"));
-    components.add(new PCComponent("650W PSU", "PSU", "Available",10, 90.0, "images/psu1.png"));
-}
-    DefaultTableModel model;
-    
+    private PCComponentController controller = new PCComponentController();
     public void loadTable() {
-    model = (DefaultTableModel) jTable1.getModel();
-    model.setRowCount(0);
+        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+        model.setRowCount(0);
 
-    for (PCComponent c : components) {
-        Object[] row = {
-            c.getName(),
-            c.getType(),
-            c.getStatus(),
-            c.getQuantity(),
-            c.getPrice(),
-            c.getImagePath()
-        };
-        model.addRow(row);
+        for (PCComponent pc : PCComponent.getComponents()) {
+            model.addRow(new Object[]{
+                pc.getName(),
+                pc.getType(),
+                pc.getStatus(),
+                pc.getQuantity(),
+                pc.getPrice(),
+                pc.getImagePath()
+            });
+        }
     }
-}
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

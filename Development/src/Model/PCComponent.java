@@ -4,11 +4,35 @@
  */
 package Model;
 
+import java.util.LinkedList;
+
 /**
  *
  * @author user
  */
 public class PCComponent {
+    
+    private static LinkedList<PCComponent> components = new LinkedList<>(); 
+    
+    public static void initDummyData() {
+    components.add(new PCComponent("Ryzen 5 5600X", "CPU", "Available",2 ,250.0, "images/cpu1.png"));
+    components.add(new PCComponent("RTX 3060", "GPU", "Available",3, 400.0, "images/gpu1.png"));
+    components.add(new PCComponent("B550M", "Motherboard", "Out of Stock",4, 150.0, "images/mb1.png"));
+    components.add(new PCComponent("16GB DDR4", "RAM", "Available",7, 70.0, "images/ram1.png"));
+    components.add(new PCComponent("650W PSU", "PSU", "Available",10, 90.0, "images/psu1.png"));
+}
+    
+    public static LinkedList<PCComponent> getComponents() {
+        return components;
+    }
+
+    public static void addComponent(PCComponent component) {
+        components.add(component);
+    }
+
+    public static void removeComponent(PCComponent component) {
+        components.remove(component);
+    }
     private String name;
     private String type;
     private String status;
