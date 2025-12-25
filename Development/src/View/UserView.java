@@ -336,12 +336,16 @@ public class UserView extends javax.swing.JFrame {
     }//GEN-LAST:event_AboutUsActionPerformed
 
     private void LogOutButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LogOutButtonActionPerformed
+<<<<<<< HEAD
         // TODO add your handling code here:
         Login log = new Login();
         log.setVisible(true);
 
     // Close current UserView JFrame
     this.dispose();
+=======
+        this.dispose();        // TODO add your handling code here:
+>>>>>>> cc176e226729b500b58dd9b7f018a5713f338d9c
     }//GEN-LAST:event_LogOutButtonActionPerformed
 
     /**
