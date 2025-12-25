@@ -4,21 +4,25 @@
  */
 package View;
 
+import Model.PCComponent;
+import java.util.LinkedList;
+
 /**
  *
  * @author sonamchhiringsherpa
  */
 public class AdminDashboard extends javax.swing.JFrame {
-    
-    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(AdminDashboard.class.getName());
 
+    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(AdminDashboard.class.getName());
+    
+    
     /**
      * Creates new form AdminDashboard
      */
     public AdminDashboard() {
-        initComponents();
+        initComponents();  
+       
     }
-
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -52,6 +56,8 @@ public class AdminDashboard extends javax.swing.JFrame {
         jLabel8 = new javax.swing.JLabel();
         jButton2 = new javax.swing.JButton();
         ViewProductPanel = new javax.swing.JPanel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        AdminViewTable = new javax.swing.JTable();
         RemoveProductPanel = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -160,6 +166,11 @@ public class AdminDashboard extends javax.swing.JFrame {
         jLabel8.setText("ImagePreview");
 
         jButton2.setText("Add");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout AddProductPanelLayout = new javax.swing.GroupLayout(AddProductPanel);
         AddProductPanel.setLayout(AddProductPanelLayout);
@@ -240,15 +251,28 @@ public class AdminDashboard extends javax.swing.JFrame {
 
         AdminSmartPanel.add(AddProductPanel, "card2");
 
+        AdminViewTable.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null}
+            },
+            new String [] {
+                "Name", "Component Type", "Status", "Quantity", "Price", "Image"
+            }
+        ));
+        jScrollPane1.setViewportView(AdminViewTable);
+
         javax.swing.GroupLayout ViewProductPanelLayout = new javax.swing.GroupLayout(ViewProductPanel);
         ViewProductPanel.setLayout(ViewProductPanelLayout);
         ViewProductPanelLayout.setHorizontalGroup(
             ViewProductPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 809, Short.MAX_VALUE)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 809, Short.MAX_VALUE)
         );
         ViewProductPanelLayout.setVerticalGroup(
             ViewProductPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 507, Short.MAX_VALUE)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 507, Short.MAX_VALUE)
         );
 
         AdminSmartPanel.add(ViewProductPanel, "card3");
@@ -318,6 +342,11 @@ public class AdminDashboard extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_AdminLogoutBtnActionPerformed
 
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        // TODO add your handling code here:
+        
+    }//GEN-LAST:event_jButton2ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -348,6 +377,7 @@ public class AdminDashboard extends javax.swing.JFrame {
     private javax.swing.JPanel AddProductPanel;
     private javax.swing.JButton AdminLogoutBtn;
     private javax.swing.JPanel AdminSmartPanel;
+    private javax.swing.JTable AdminViewTable;
     private javax.swing.JComboBox<String> CompTypeCombobox;
     private javax.swing.JTextField ComponentPriceField;
     private javax.swing.JTextField QuantityField;
@@ -368,6 +398,7 @@ public class AdminDashboard extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextField nameField;
     // End of variables declaration//GEN-END:variables
 }
