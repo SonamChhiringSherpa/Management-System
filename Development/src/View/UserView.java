@@ -370,6 +370,9 @@ public class UserView extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(() -> new UserView().setVisible(true));
     }
     private PCComponentController controller = new PCComponentController();
+   
+   
+
     public void loadTable() {
         DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
         model.setRowCount(0);

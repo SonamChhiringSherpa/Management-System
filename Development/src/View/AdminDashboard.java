@@ -23,6 +23,8 @@ public class AdminDashboard extends javax.swing.JFrame {
     /**
      * Creates new form AdminDashboard
      */
+    private PCComponent selectedComponent;
+
     public AdminDashboard() {
         initComponents();
         PCComponent.initDummyData();
@@ -44,6 +46,7 @@ public class AdminDashboard extends javax.swing.JFrame {
         jPanel2 = new javax.swing.JPanel();
         AddProductBtn = new javax.swing.JButton();
         ViewProductBtn = new javax.swing.JButton();
+        UpdateProduct = new javax.swing.JButton();
         AdminSmartPanel = new javax.swing.JPanel();
         AddProductPanel = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
@@ -64,8 +67,19 @@ public class AdminDashboard extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         AdminViewTable = new javax.swing.JTable();
         RemoveProdductBtn = new javax.swing.JButton();
-        UpdateProductBtn = new javax.swing.JButton();
-        RemoveProductPanel = new javax.swing.JPanel();
+        jLabel9 = new javax.swing.JLabel();
+        UpdateProductPanel = new javax.swing.JPanel();
+        jLabel10 = new javax.swing.JLabel();
+        nameField1 = new javax.swing.JTextField();
+        CompTypeCombobox1 = new javax.swing.JComboBox<>();
+        jLabel11 = new javax.swing.JLabel();
+        jLabel12 = new javax.swing.JLabel();
+        StatusComboBox1 = new javax.swing.JComboBox<>();
+        jLabel13 = new javax.swing.JLabel();
+        QuantityField1 = new javax.swing.JTextField();
+        jLabel14 = new javax.swing.JLabel();
+        ComponentPriceField1 = new javax.swing.JTextField();
+        jButton3 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -118,6 +132,13 @@ public class AdminDashboard extends javax.swing.JFrame {
             }
         });
 
+        UpdateProduct.setText("Update Product");
+        UpdateProduct.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                UpdateProductActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -126,7 +147,8 @@ public class AdminDashboard extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(AddProductBtn, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(ViewProductBtn, javax.swing.GroupLayout.DEFAULT_SIZE, 163, Short.MAX_VALUE))
+                    .addComponent(ViewProductBtn, javax.swing.GroupLayout.DEFAULT_SIZE, 163, Short.MAX_VALUE)
+                    .addComponent(UpdateProduct, javax.swing.GroupLayout.DEFAULT_SIZE, 163, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
@@ -136,6 +158,8 @@ public class AdminDashboard extends javax.swing.JFrame {
                 .addComponent(AddProductBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(ViewProductBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(UpdateProduct, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -246,7 +270,7 @@ public class AdminDashboard extends javax.swing.JFrame {
                     .addComponent(jButton1))
                 .addGap(31, 31, 31)
                 .addComponent(jButton2)
-                .addContainerGap(181, Short.MAX_VALUE))
+                .addContainerGap(330, Short.MAX_VALUE))
         );
 
         AdminSmartPanel.add(AddProductPanel, "card2");
@@ -271,13 +295,6 @@ public class AdminDashboard extends javax.swing.JFrame {
             }
         });
 
-        UpdateProductBtn.setText("Upadate Product");
-        UpdateProductBtn.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                UpdateProductBtnActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout ViewProductPanelLayout = new javax.swing.GroupLayout(ViewProductPanel);
         ViewProductPanel.setLayout(ViewProductPanelLayout);
         ViewProductPanelLayout.setHorizontalGroup(
@@ -286,11 +303,13 @@ public class AdminDashboard extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 797, Short.MAX_VALUE)
                 .addContainerGap())
-            .addGroup(ViewProductPanelLayout.createSequentialGroup()
-                .addGap(38, 38, 38)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, ViewProductPanelLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(RemoveProdductBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(UpdateProductBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(42, 42, 42))
+            .addGroup(ViewProductPanelLayout.createSequentialGroup()
+                .addGap(82, 82, 82)
+                .addComponent(jLabel9)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         ViewProductPanelLayout.setVerticalGroup(
@@ -299,26 +318,94 @@ public class AdminDashboard extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 346, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addGroup(ViewProductPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(RemoveProdductBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(UpdateProductBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(105, Short.MAX_VALUE))
+                .addComponent(RemoveProdductBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(28, 28, 28)
+                .addComponent(jLabel9)
+                .addContainerGap(228, Short.MAX_VALUE))
         );
 
         AdminSmartPanel.add(ViewProductPanel, "card3");
 
-        javax.swing.GroupLayout RemoveProductPanelLayout = new javax.swing.GroupLayout(RemoveProductPanel);
-        RemoveProductPanel.setLayout(RemoveProductPanelLayout);
-        RemoveProductPanelLayout.setHorizontalGroup(
-            RemoveProductPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 809, Short.MAX_VALUE)
+        jLabel10.setText("Name:");
+
+        CompTypeCombobox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { " ", "CPU", "GPU", "Motherboard", "RAM", "PSU" }));
+
+        jLabel11.setText("Component Type:");
+
+        jLabel12.setText("Status:");
+
+        StatusComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { " ", "Available", "Out of Stock" }));
+
+        jLabel13.setText("Quantity:");
+
+        jLabel14.setText("Price:");
+
+        jButton3.setText("Confirm Update");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout UpdateProductPanelLayout = new javax.swing.GroupLayout(UpdateProductPanel);
+        UpdateProductPanel.setLayout(UpdateProductPanelLayout);
+        UpdateProductPanelLayout.setHorizontalGroup(
+            UpdateProductPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(UpdateProductPanelLayout.createSequentialGroup()
+                .addGap(56, 56, 56)
+                .addGroup(UpdateProductPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jButton3)
+                    .addGroup(UpdateProductPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addGroup(UpdateProductPanelLayout.createSequentialGroup()
+                            .addComponent(jLabel10)
+                            .addGap(80, 80, 80)
+                            .addComponent(nameField1, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(UpdateProductPanelLayout.createSequentialGroup()
+                            .addGroup(UpdateProductPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jLabel12)
+                                .addComponent(jLabel13)
+                                .addComponent(jLabel14))
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(UpdateProductPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addGroup(UpdateProductPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(QuantityField1)
+                                    .addComponent(ComponentPriceField1, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(StatusComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGroup(UpdateProductPanelLayout.createSequentialGroup()
+                            .addComponent(jLabel11)
+                            .addGap(18, 18, 18)
+                            .addComponent(CompTypeCombobox1, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap(505, Short.MAX_VALUE))
         );
-        RemoveProductPanelLayout.setVerticalGroup(
-            RemoveProductPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 507, Short.MAX_VALUE)
+        UpdateProductPanelLayout.setVerticalGroup(
+            UpdateProductPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(UpdateProductPanelLayout.createSequentialGroup()
+                .addGap(37, 37, 37)
+                .addGroup(UpdateProductPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel10)
+                    .addComponent(nameField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(UpdateProductPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel11)
+                    .addComponent(CompTypeCombobox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(21, 21, 21)
+                .addGroup(UpdateProductPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel12)
+                    .addComponent(StatusComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(UpdateProductPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel13)
+                    .addComponent(QuantityField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(UpdateProductPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel14)
+                    .addComponent(ComponentPriceField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(32, 32, 32)
+                .addComponent(jButton3)
+                .addContainerGap(394, Short.MAX_VALUE))
         );
 
-        AdminSmartPanel.add(RemoveProductPanel, "card4");
+        AdminSmartPanel.add(UpdateProductPanel, "card4");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -361,10 +448,25 @@ public class AdminDashboard extends javax.swing.JFrame {
 
     private void RemoveProdductBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RemoveProdductBtnActionPerformed
         // TODO add your handling code here:
-        AdminSmartPanel.removeAll();
-        AdminSmartPanel.add(RemoveProductPanel);
-        AdminSmartPanel.repaint();
-        AdminSmartPanel.revalidate();
+        int selectedRow = AdminViewTable.getSelectedRow();
+
+        if (selectedRow == -1) {
+            JOptionPane.showMessageDialog(this,
+                    "Please select a row to delete");
+            return;
+        }
+
+        PCComponent selectedComponent = PCComponent.getComponents().get(selectedRow);
+
+        // Call controller
+        PCComponentController controller = new PCComponentController();
+        controller.deleteComponent(selectedComponent);
+
+        JOptionPane.showMessageDialog(this,
+                "Component deleted successfully");
+
+        // Refresh table
+        loadTableData();
     }//GEN-LAST:event_RemoveProdductBtnActionPerformed
 
     private void AdminLogoutBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AdminLogoutBtnActionPerformed
@@ -402,16 +504,78 @@ public class AdminDashboard extends javax.swing.JFrame {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
         JFileChooser fileChooser = new JFileChooser();
-    int result = fileChooser.showOpenDialog(this);
+        int result = fileChooser.showOpenDialog(this);
 
-    if (result == JFileChooser.APPROVE_OPTION) {
-        selectedImagePath = fileChooser.getSelectedFile().getAbsolutePath();
-    }
+        if (result == JFileChooser.APPROVE_OPTION) {
+            selectedImagePath = fileChooser.getSelectedFile().getAbsolutePath();
+        }
     }//GEN-LAST:event_jButton1ActionPerformed
 
-    private void UpdateProductBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_UpdateProductBtnActionPerformed
+    private void UpdateProductActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_UpdateProductActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_UpdateProductBtnActionPerformed
+
+        int selectedRow = AdminViewTable.getSelectedRow();
+
+        if (selectedRow == -1) {
+            JOptionPane.showMessageDialog(this,
+                    "Please select a product to update");
+            return;
+        }
+
+        // Get actual object from Model
+        selectedComponent
+                = PCComponent.getComponents().get(selectedRow);
+
+        // Auto-fill text fields
+        nameField1.setText(selectedComponent.getName());
+        CompTypeCombobox1.setSelectedItem(selectedComponent.getType());
+        StatusComboBox1.setSelectedItem(selectedComponent.getStatus());
+        QuantityField1.setText(
+                String.valueOf(selectedComponent.getQuantity()));
+        ComponentPriceField1.setText(
+                String.valueOf(selectedComponent.getPrice()));
+
+        AdminSmartPanel.removeAll();
+        AdminSmartPanel.add(UpdateProductPanel);
+        AdminSmartPanel.repaint();
+        AdminSmartPanel.revalidate();
+
+
+    }//GEN-LAST:event_UpdateProductActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        // TODO add your handling code here:
+        if (selectedComponent == null) {
+            JOptionPane.showMessageDialog(this,
+                    "No product selected");
+            return;
+        }
+
+        try {
+            int quantity = Integer.parseInt(QuantityField1.getText());
+            double price = Double.parseDouble(ComponentPriceField1.getText());
+            controller.updateComponent(
+                    selectedComponent,
+                    nameField1.getName(),
+                    CompTypeCombobox1.getSelectedItem().toString(),
+                    StatusComboBox1.getSelectedItem().toString(),
+                    quantity, // int
+                    price);
+                    loadTableData();   // refresh admin table
+
+            JOptionPane.showMessageDialog(this,
+                    "Product updated successfully");
+
+            AdminSmartPanel.removeAll();
+            AdminSmartPanel.add(ViewProductPanel);
+            AdminSmartPanel.repaint();
+            AdminSmartPanel.revalidate();
+
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this,
+                    "Invalid quantity or price");
+        }
+    }//GEN-LAST:event_jButton3ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -445,17 +609,27 @@ public class AdminDashboard extends javax.swing.JFrame {
     private javax.swing.JPanel AdminSmartPanel;
     private javax.swing.JTable AdminViewTable;
     private javax.swing.JComboBox<String> CompTypeCombobox;
+    private javax.swing.JComboBox<String> CompTypeCombobox1;
     private javax.swing.JTextField ComponentPriceField;
+    private javax.swing.JTextField ComponentPriceField1;
     private javax.swing.JTextField QuantityField;
+    private javax.swing.JTextField QuantityField1;
     private javax.swing.JButton RemoveProdductBtn;
-    private javax.swing.JPanel RemoveProductPanel;
     private javax.swing.JComboBox<String> StatusComboBox;
-    private javax.swing.JButton UpdateProductBtn;
+    private javax.swing.JComboBox<String> StatusComboBox1;
+    private javax.swing.JButton UpdateProduct;
+    private javax.swing.JPanel UpdateProductPanel;
     private javax.swing.JButton ViewProductBtn;
     private javax.swing.JPanel ViewProductPanel;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
+    private javax.swing.JLabel jLabel13;
+    private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -463,10 +637,12 @@ public class AdminDashboard extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextField nameField;
+    private javax.swing.JTextField nameField1;
     // End of variables declaration//GEN-END:variables
  private void loadTableData() {
 

@@ -11,7 +11,8 @@ import Model.PCComponent;
  * @author user
  */
 public class PCComponentController {
-     public boolean addComponent(
+
+    public boolean addComponent(
             String name,
             String type,
             String status,
@@ -50,5 +51,24 @@ public class PCComponentController {
         PCComponent.addComponent(pc);
 
         return true;
+    }
+
+    public boolean deleteComponent(PCComponent component) {
+
+        if (component == null) {
+            return false;
+        }
+
+        PCComponent.removeComponent(component);
+        return true;
+    }
+
+    public void updateComponent(PCComponent pc, String name, String type, String status, int quantity, double price) {
+        pc.setName(name);
+        pc.setType(type);
+        pc.setStatus(status);
+        pc.setQuantity(quantity);
+        pc.setPrice(price);
+        
     }
 }

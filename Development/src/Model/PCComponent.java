@@ -15,6 +15,10 @@ public class PCComponent {
     private static LinkedList<PCComponent> components = new LinkedList<>(); 
     
     public static void initDummyData() {
+        if (!components.isEmpty()) {
+            return; // s prevents duplicate insertion
+        }
+
     components.add(new PCComponent("Ryzen 5 5600X", "CPU", "Available",2 ,250.0, "images/cpu1.png"));
     components.add(new PCComponent("RTX 3060", "GPU", "Available",3, 400.0, "images/gpu1.png"));
     components.add(new PCComponent("B550M", "Motherboard", "Out of Stock",4, 150.0, "images/mb1.png"));
@@ -62,5 +66,7 @@ public class PCComponent {
     public void setQuantity(int quantity) { this.quantity = quantity; }
     public void setPrice(double price) { this.price = price; }
     public void setImagePath(String imagePath) { this.imagePath = imagePath; }
+    
+    
 }
 
