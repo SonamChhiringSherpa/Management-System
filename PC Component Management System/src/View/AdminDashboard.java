@@ -526,7 +526,7 @@ public class AdminDashboard extends javax.swing.JFrame {
         selectedComponent
                 = PCComponent.getComponents().get(selectedRow);
 
-        // Auto-fill text fields
+        // Auto fill text fields
         nameField1.setText(selectedComponent.getName());
         CompTypeCombobox1.setSelectedItem(selectedComponent.getType());
         StatusComboBox1.setSelectedItem(selectedComponent.getStatus());
@@ -561,6 +561,7 @@ public class AdminDashboard extends javax.swing.JFrame {
                     StatusComboBox1.getSelectedItem().toString(),
                     quantity, // int
                     price);
+                    
                     loadTableData();   // refresh admin table
 
             JOptionPane.showMessageDialog(this,
