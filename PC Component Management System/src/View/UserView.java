@@ -9,6 +9,9 @@ import Model.PCComponent;
 import java.util.LinkedList;
 import javax.swing.table.DefaultTableModel;
 import View.Login;
+import java.awt.Image;
+import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -27,6 +30,7 @@ public class UserView extends javax.swing.JFrame {
         initComponents();
         PCComponent.initDummyData();
         loadTable();
+        setupTableModel();
     }
 
     /**
@@ -46,6 +50,7 @@ public class UserView extends javax.swing.JFrame {
         Home = new javax.swing.JButton();
         AboutUs = new javax.swing.JButton();
         Components = new javax.swing.JButton();
+        Cart = new javax.swing.JButton();
         SmartPanel = new javax.swing.JPanel();
         HomePanel = new javax.swing.JPanel();
         AboutUsPanel = new javax.swing.JPanel();
@@ -53,15 +58,20 @@ public class UserView extends javax.swing.JFrame {
         FilterPanel = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
-        jComboBox2 = new javax.swing.JComboBox<>();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
-        jTextField1 = new javax.swing.JTextField();
-        jButton4 = new javax.swing.JButton();
+        componentList_combobox = new javax.swing.JComboBox<>();
+        sortByName = new javax.swing.JButton();
+        sortByPrice = new javax.swing.JButton();
+        searchField = new javax.swing.JTextField();
+        searchBtn = new javax.swing.JButton();
+        filterBtn = new javax.swing.JButton();
         ItemPanel = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
+        componentTable = new javax.swing.JTable();
+        jButton1 = new javax.swing.JButton();
+        CartPanel = new javax.swing.JPanel();
+        jScrollPane2 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
+        jLabel4 = new javax.swing.JLabel();
 
         jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
@@ -123,6 +133,13 @@ public class UserView extends javax.swing.JFrame {
             }
         });
 
+        Cart.setText("Cart");
+        Cart.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                CartActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout NavigationPanelLayout = new javax.swing.GroupLayout(NavigationPanel);
         NavigationPanel.setLayout(NavigationPanelLayout);
         NavigationPanelLayout.setHorizontalGroup(
@@ -130,6 +147,7 @@ public class UserView extends javax.swing.JFrame {
             .addComponent(Home, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(AboutUs, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 165, Short.MAX_VALUE)
             .addComponent(Components, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 165, Short.MAX_VALUE)
+            .addComponent(Cart, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 165, Short.MAX_VALUE)
         );
         NavigationPanelLayout.setVerticalGroup(
             NavigationPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -140,6 +158,8 @@ public class UserView extends javax.swing.JFrame {
                 .addComponent(AboutUs, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(Components, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(Cart, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -155,7 +175,7 @@ public class UserView extends javax.swing.JFrame {
         );
         HomePanelLayout.setVerticalGroup(
             HomePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 582, Short.MAX_VALUE)
+            .addGap(0, 613, Short.MAX_VALUE)
         );
 
         SmartPanel.add(HomePanel, "card2");
@@ -168,7 +188,7 @@ public class UserView extends javax.swing.JFrame {
         );
         AboutUsPanelLayout.setVerticalGroup(
             AboutUsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 582, Short.MAX_VALUE)
+            .addGap(0, 613, Short.MAX_VALUE)
         );
 
         SmartPanel.add(AboutUsPanel, "card3");
@@ -177,19 +197,44 @@ public class UserView extends javax.swing.JFrame {
 
         jLabel2.setText("Filters:");
 
-        jLabel3.setText("Component Name:");
+        jLabel3.setText("Component Type:");
 
-        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        componentList_combobox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { " ","CPU","GPU","Motherboard","RAM","PSU" }));
 
-        jButton1.setText("Sort By Name");
+        sortByName.setText("Sort By Name");
+        sortByName.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                sortByNameActionPerformed(evt);
+            }
+        });
 
-        jButton2.setText("Sort by Component");
+        sortByPrice.setText("Sort By Price");
+        sortByPrice.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                sortByPriceActionPerformed(evt);
+            }
+        });
 
-        jButton3.setText("Sort By Price");
+        searchField.setText("Search");
+        searchField.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                searchFieldMouseClicked(evt);
+            }
+        });
 
-        jTextField1.setText("Search");
+        searchBtn.setText("Search");
+        searchBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                searchBtnActionPerformed(evt);
+            }
+        });
 
-        jButton4.setText("Search");
+        filterBtn.setText("Filter");
+        filterBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                filterBtnActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout FilterPanelLayout = new javax.swing.GroupLayout(FilterPanel);
         FilterPanel.setLayout(FilterPanelLayout);
@@ -199,47 +244,54 @@ public class UserView extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(FilterPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(FilterPanelLayout.createSequentialGroup()
-                        .addComponent(jLabel3)
+                        .addComponent(searchField, javax.swing.GroupLayout.PREFERRED_SIZE, 169, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 69, Short.MAX_VALUE)
-                        .addComponent(jButton1)
-                        .addGap(18, 18, 18)
-                        .addComponent(jButton2)
-                        .addGap(18, 18, 18)
-                        .addComponent(jButton3)
-                        .addContainerGap(85, Short.MAX_VALUE))
+                        .addComponent(searchBtn)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(FilterPanelLayout.createSequentialGroup()
                         .addGroup(FilterPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel2)
                             .addGroup(FilterPanelLayout.createSequentialGroup()
-                                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 169, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jLabel3)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jButton4)))
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                                .addComponent(componentList_combobox, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(filterBtn)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 232, Short.MAX_VALUE))
+                            .addGroup(FilterPanelLayout.createSequentialGroup()
+                                .addComponent(jLabel2)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(sortByName)))
+                        .addGap(18, 18, 18)
+                        .addComponent(sortByPrice)
+                        .addGap(94, 94, 94))))
         );
         FilterPanelLayout.setVerticalGroup(
             FilterPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(FilterPanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel2)
+                .addGroup(FilterPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(FilterPanelLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jLabel2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(FilterPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel3)
+                            .addComponent(componentList_combobox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(filterBtn)))
+                    .addGroup(FilterPanelLayout.createSequentialGroup()
+                        .addGap(16, 16, 16)
+                        .addGroup(FilterPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(sortByName)
+                            .addComponent(sortByPrice))))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(FilterPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel3)
-                    .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton1)
-                    .addComponent(jButton2)
-                    .addComponent(jButton3))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(FilterPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton4))
+                    .addComponent(searchField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(searchBtn))
                 .addContainerGap(10, Short.MAX_VALUE))
         );
 
         ItemPanel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        componentTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null, null},
                 {null, null, null, null, null, null},
@@ -250,7 +302,7 @@ public class UserView extends javax.swing.JFrame {
                 "Name", "Component Type", "Status", "Quantity", "Price", "Image"
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(componentTable);
 
         javax.swing.GroupLayout ItemPanelLayout = new javax.swing.GroupLayout(ItemPanel);
         ItemPanel.setLayout(ItemPanelLayout);
@@ -260,8 +312,10 @@ public class UserView extends javax.swing.JFrame {
         );
         ItemPanelLayout.setVerticalGroup(
             ItemPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 464, Short.MAX_VALUE)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 290, Short.MAX_VALUE)
         );
+
+        jButton1.setText("Add to Cart");
 
         javax.swing.GroupLayout ComponentsPanelLayout = new javax.swing.GroupLayout(ComponentsPanel);
         ComponentsPanel.setLayout(ComponentsPanelLayout);
@@ -273,6 +327,10 @@ public class UserView extends javax.swing.JFrame {
                     .addComponent(ItemPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(FilterPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
+            .addGroup(ComponentsPanelLayout.createSequentialGroup()
+                .addGap(37, 37, 37)
+                .addComponent(jButton1)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         ComponentsPanelLayout.setVerticalGroup(
             ComponentsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -280,11 +338,54 @@ public class UserView extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(FilterPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(ItemPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+                .addComponent(ItemPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jButton1)
+                .addContainerGap(176, Short.MAX_VALUE))
         );
 
         SmartPanel.add(ComponentsPanel, "card4");
+
+        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane2.setViewportView(jTable1);
+
+        jLabel4.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        jLabel4.setText("Your Items");
+
+        javax.swing.GroupLayout CartPanelLayout = new javax.swing.GroupLayout(CartPanel);
+        CartPanel.setLayout(CartPanelLayout);
+        CartPanelLayout.setHorizontalGroup(
+            CartPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(CartPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(CartPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 760, Short.MAX_VALUE)
+                    .addGroup(CartPanelLayout.createSequentialGroup()
+                        .addComponent(jLabel4)
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
+        );
+        CartPanelLayout.setVerticalGroup(
+            CartPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(CartPanelLayout.createSequentialGroup()
+                .addGap(24, 24, 24)
+                .addComponent(jLabel4)
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(112, Short.MAX_VALUE))
+        );
+
+        SmartPanel.add(CartPanel, "card5");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -345,6 +446,49 @@ public class UserView extends javax.swing.JFrame {
 
     }//GEN-LAST:event_LogOutButtonActionPerformed
 
+    private void sortByNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sortByNameActionPerformed
+        LinkedList<PCComponent> sorted = controller.sortByName();
+        loadTable(sorted);
+    }//GEN-LAST:event_sortByNameActionPerformed
+
+    private void sortByPriceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sortByPriceActionPerformed
+        LinkedList<PCComponent> sorted = controller.sortByPrice();
+        loadTable(sorted);
+    }//GEN-LAST:event_sortByPriceActionPerformed
+
+    private void searchBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchBtnActionPerformed
+       String searchTerm = searchField.getText().trim();
+    if (searchTerm.isEmpty() || searchTerm.equals("Search")) {
+        JOptionPane.showMessageDialog(this, "Please enter a search term.", "Search Error", JOptionPane.ERROR_MESSAGE);
+        return;
+    }
+
+    LinkedList<PCComponent> results = controller.searchByName(searchTerm);
+    loadTable(results);
+    }//GEN-LAST:event_searchBtnActionPerformed
+
+    private void filterBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_filterBtnActionPerformed
+      String type = (String) componentList_combobox.getSelectedItem();
+    if (type == null || type.isEmpty() || componentList_combobox.getSelectedIndex() == 0) {
+        JOptionPane.showMessageDialog(this, "Please select a valid component type.", "Filter Error", JOptionPane.ERROR_MESSAGE);
+        return;
+    }
+
+    LinkedList<PCComponent> filtered = controller.filterByType(type);
+    loadTable(filtered);
+    }//GEN-LAST:event_filterBtnActionPerformed
+
+    private void searchFieldMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_searchFieldMouseClicked
+        searchField.setText(""); 
+    }//GEN-LAST:event_searchFieldMouseClicked
+
+    private void CartActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CartActionPerformed
+        SmartPanel.removeAll();
+        SmartPanel.add(CartPanel);
+        SmartPanel.repaint();
+        SmartPanel.revalidate();
+    }//GEN-LAST:event_CartActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -370,29 +514,72 @@ public class UserView extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(() -> new UserView().setVisible(true));
     }
     private PCComponentController controller = new PCComponentController();
-   
-   
 
+    // Overloaded: Load all components (no parameter)
     public void loadTable() {
-        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
-        model.setRowCount(0);
-
-        for (PCComponent pc : PCComponent.getComponents()) {
-            model.addRow(new Object[]{
-                pc.getName(),
-                pc.getType(),
-                pc.getStatus(),
-                pc.getQuantity(),
-                pc.getPrice(),
-                pc.getImagePath()
-            });
-        }
+        loadTable(PCComponent.getComponents());
     }
+
+// Overloaded: Load specific list of components
+    public void loadTable(LinkedList<PCComponent> components) {
+    DefaultTableModel model = (DefaultTableModel) componentTable.getModel();
+    model.setRowCount(0);
+
+    for (PCComponent pc : components) {
+        ImageIcon thumb = makeThumbnail(pc.getImagePath(), 60, 40);
+
+        model.addRow(new Object[]{
+            pc.getName(),
+            pc.getType(),
+            pc.getStatus(),
+            pc.getQuantity(),
+            pc.getPrice(),
+            thumb   
+        });
+    }
+}
+
+    
+    private void setupTableModel() {
+    DefaultTableModel model = new DefaultTableModel(
+        new Object[][]{},
+        new String[]{"Name", "Component Type", "Status", "Quantity", "Price", "Image"}
+    ) {
+        @Override
+        public Class<?> getColumnClass(int columnIndex) {
+            if (columnIndex == 5) { // Image column
+                return javax.swing.Icon.class;
+            }
+            return Object.class;
+        }
+
+        @Override
+        public boolean isCellEditable(int row, int column) {
+            return false;
+        }
+    };
+
+    componentTable.setModel(model);
+    componentTable.setRowHeight(45);
+}
+    
+    private ImageIcon makeThumbnail(String imagePath, int w, int h) {
+    if (imagePath == null || imagePath.trim().isEmpty()) return null;
+
+    ImageIcon icon = new ImageIcon(imagePath);
+    Image img = icon.getImage();
+    Image scaled = img.getScaledInstance(w, h, Image.SCALE_SMOOTH);
+    return new ImageIcon(scaled);
+}
+
+
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton AboutUs;
     private javax.swing.JPanel AboutUsPanel;
+    private javax.swing.JButton Cart;
+    private javax.swing.JPanel CartPanel;
     private javax.swing.JButton Components;
     private javax.swing.JPanel ComponentsPanel;
     private javax.swing.JPanel FilterPanel;
@@ -402,19 +589,23 @@ public class UserView extends javax.swing.JFrame {
     private javax.swing.JButton LogOutButton;
     private javax.swing.JPanel NavigationPanel;
     private javax.swing.JPanel SmartPanel;
+    private javax.swing.JComboBox<String> componentList_combobox;
+    private javax.swing.JTable componentTable;
+    private javax.swing.JButton filterBtn;
     private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
     private javax.swing.JComboBox<String> jComboBox1;
-    private javax.swing.JComboBox<String> jComboBox2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTable jTable1;
-    private javax.swing.JTextField jTextField1;
+    private javax.swing.JButton searchBtn;
+    private javax.swing.JTextField searchField;
+    private javax.swing.JButton sortByName;
+    private javax.swing.JButton sortByPrice;
     // End of variables declaration//GEN-END:variables
 
 }

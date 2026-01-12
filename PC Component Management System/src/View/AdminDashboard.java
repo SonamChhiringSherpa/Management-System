@@ -6,7 +6,10 @@ package View;
 
 import Controller.PCComponentController;
 import Model.PCComponent;
+import java.awt.Image;
+import java.io.File;
 import java.util.LinkedList;
+import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -17,16 +20,19 @@ import javax.swing.table.DefaultTableModel;
  */
 public class AdminDashboard extends javax.swing.JFrame {
 
+    private final PCComponentController controller = new PCComponentController();
+    private PCComponent selectedComponent;
+
     LinkedList<PCComponent> components = PCComponent.getComponents();
+
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(AdminDashboard.class.getName());
 
     /**
      * Creates new form AdminDashboard
      */
-    private PCComponent selectedComponent;
-
     public AdminDashboard() {
         initComponents();
+        setupTableModel();
         PCComponent.initDummyData();
         loadTableData();
     }
@@ -507,7 +513,27 @@ public class AdminDashboard extends javax.swing.JFrame {
         int result = fileChooser.showOpenDialog(this);
 
         if (result == JFileChooser.APPROVE_OPTION) {
-            selectedImagePath = fileChooser.getSelectedFile().getAbsolutePath();
+            File file = fileChooser.getSelectedFile();
+            selectedImagePath = file.getAbsolutePath();
+
+            // Preview image in jLabel8 (resize to label size)
+            ImageIcon icon = new ImageIcon(selectedImagePath);
+            Image img = icon.getImage();
+
+            int w = jLabel8.getWidth();
+            int h = jLabel8.getHeight();
+
+            if (w <= 0 || h <= 0) {
+                // fallback size (in case label not laid out yet)
+                w = 160;
+                h = 116;
+            }
+
+            Image scaledImg = img.getScaledInstance(w, h, Image.SCALE_SMOOTH);
+            jLabel8.setIcon(new ImageIcon(scaledImg));
+            jLabel8.setText(""); // remove "ImagePreview" text if any
+        } else {
+            JOptionPane.showMessageDialog(this, "No image selected.");
         }
     }//GEN-LAST:event_jButton1ActionPerformed
 
@@ -561,8 +587,8 @@ public class AdminDashboard extends javax.swing.JFrame {
                     StatusComboBox1.getSelectedItem().toString(),
                     quantity, // int
                     price);
-                    
-                    loadTableData();   // refresh admin table
+
+            loadTableData();   // refresh admin table
 
             JOptionPane.showMessageDialog(this,
                     "Product updated successfully");
@@ -645,25 +671,65 @@ public class AdminDashboard extends javax.swing.JFrame {
     private javax.swing.JTextField nameField;
     private javax.swing.JTextField nameField1;
     // End of variables declaration//GEN-END:variables
- private void loadTableData() {
+private void loadTableData() {
+        loadTable(PCComponent.getComponents());
+    }
 
+    public void loadTable(LinkedList<PCComponent> components) {
         DefaultTableModel model = (DefaultTableModel) AdminViewTable.getModel();
         model.setRowCount(0);
 
-        for (PCComponent pc : PCComponent.getComponents()) {
+        for (PCComponent pc : components) {
+            ImageIcon thumb = makeThumbnail(pc.getImagePath(), 60, 40);
+
             model.addRow(new Object[]{
                 pc.getName(),
                 pc.getType(),
                 pc.getStatus(),
                 pc.getQuantity(),
                 pc.getPrice(),
-                pc.getImagePath()
+                thumb
             });
         }
     }
-    private PCComponentController controller = new PCComponentController();
-    // variable to store the selected image path
+
+    private void setupTableModel() {
+        DefaultTableModel model = new DefaultTableModel(
+                new Object[][]{},
+                new String[]{"Name", "Component Type", "Status", "Quantity", "Price", "Image"}
+        ) {
+            @Override
+            public Class<?> getColumnClass(int columnIndex) {
+                if (columnIndex == 5) { // Image column
+                    return javax.swing.Icon.class;
+                }
+                return Object.class;
+            }
+
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+
+        AdminViewTable.setModel(model);
+        AdminViewTable.setRowHeight(45);
+    }
+
+    private final PCComponentController controller = new PCComponentController();
     private String selectedImagePath = "";
+    private PCComponent selectedComponent;
+
+    private ImageIcon makeThumbnail(String imagePath, int w, int h) {
+        if (imagePath == null || imagePath.trim().isEmpty()) {
+            return null;
+        }
+
+        ImageIcon icon = new ImageIcon(imagePath);
+        Image img = icon.getImage();
+        Image scaled = img.getScaledInstance(w, h, Image.SCALE_SMOOTH);
+        return new ImageIcon(scaled);
+    }
 
     private void clearForm() {
         nameField.setText("");

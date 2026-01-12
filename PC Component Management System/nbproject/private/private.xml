@@ -5,6 +5,11 @@
         <group>
             <file>file:/Users/sonamchhiringsherpa/Desktop/ManagementSystem/PC%20Component%20Management%20System/src/View/Login.java</file>
             <file>file:/Users/sonamchhiringsherpa/Desktop/ManagementSystem/PC%20Component%20Management%20System/src/Controller/PCComponentController.java</file>
+            <file>file:/Users/sonamchhiringsherpa/Desktop/ManagementSystem/PC%20Component%20Management%20System/src/Model/PCComponent.java</file>
+            <file>file:/Users/sonamchhiringsherpa/Desktop/ManagementSystem/PC%20Component%20Management%20System/src/Model/LoginModel.java</file>
+            <file>file:/Users/sonamchhiringsherpa/Desktop/ManagementSystem/PC%20Component%20Management%20System/src/Controller/LoginController.java</file>
+            <file>file:/Users/sonamchhiringsherpa/Desktop/ManagementSystem/PC%20Component%20Management%20System/src/View/UserView.java</file>
+            <file>file:/Users/sonamchhiringsherpa/Desktop/ManagementSystem/PC%20Component%20Management%20System/src/View/AdminDashboard.java</file>
         </group>
     </open-files>
 </project-private>
