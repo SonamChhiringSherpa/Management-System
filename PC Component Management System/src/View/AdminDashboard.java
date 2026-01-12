@@ -716,9 +716,9 @@ private void loadTableData() {
         AdminViewTable.setRowHeight(45);
     }
 
-    private final PCComponentController controller = new PCComponentController();
-    private String selectedImagePath = "";
-    private PCComponent selectedComponent;
+//    private final PCComponentController controller = new PCComponentController();
+//    private String selectedImagePath = "";
+//    private PCComponent selectedComponent;
 
     private ImageIcon makeThumbnail(String imagePath, int w, int h) {
         if (imagePath == null || imagePath.trim().isEmpty()) {
