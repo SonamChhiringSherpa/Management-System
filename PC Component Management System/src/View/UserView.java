@@ -30,6 +30,9 @@ import javax.swing.table.TableRowSorter;
  */
 public class UserView extends javax.swing.JFrame {
 
+    private final String username; // pass from login
+    private final OrderController orderController = new OrderController();
+
     private final CartStack cartStack = new CartStack();
     private final CartController cartController = new CartController(cartStack);
 
@@ -43,7 +46,8 @@ public class UserView extends javax.swing.JFrame {
     /**
      * Creates new form UserView
      */
-    public UserView() {
+    public UserView(String username) {
+        this.username = username;
         initComponents();
 
         componentTable.setModel(tableModel);
@@ -388,6 +392,11 @@ public class UserView extends javax.swing.JFrame {
         });
 
         placeOrder.setText("Place Order");
+        placeOrder.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                placeOrderActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout CartPanelLayout = new javax.swing.GroupLayout(CartPanel);
         CartPanel.setLayout(CartPanelLayout);
@@ -455,7 +464,7 @@ public class UserView extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(NavigationPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(SmartPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 621, Short.MAX_VALUE)))
+                    .addComponent(SmartPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
         );
 
         pack();
@@ -543,117 +552,137 @@ public class UserView extends javax.swing.JFrame {
     private void addToCartActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addToCartActionPerformed
         // TODO add your handling code here:
         int viewRow = componentTable.getSelectedRow();
-    if (viewRow == -1) {
-        JOptionPane.showMessageDialog(this, "Please select a product first.");
-        return;
-    }
+        if (viewRow == -1) {
+            JOptionPane.showMessageDialog(this, "Please select a product first.");
+            return;
+        }
 
-    int modelRow = componentTable.convertRowIndexToModel(viewRow);
-    PCComponent selected = tableModel.getComponentAt(modelRow);
+        int modelRow = componentTable.convertRowIndexToModel(viewRow);
+        PCComponent selected = tableModel.getComponentAt(modelRow);
 
-    if (selected == null) {
-        JOptionPane.showMessageDialog(this, "Invalid selection.");
-        return;
-    }
+        if (selected == null) {
+            JOptionPane.showMessageDialog(this, "Invalid selection.");
+            return;
+        }
 
-    // dialog (view job)
-    JPanel panel = new JPanel();
-    panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+        // dialog (view job)
+        JPanel panel = new JPanel();
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 
-    String desc =
-            "Name: " + selected.getName() + "\n"
-            + "Type: " + selected.getType() + "\n"
-            + "Status: " + selected.getStatus() + "\n"
-            + "Available Qty: " + selected.getQuantity() + "\n"
-            + "Price: " + selected.getPrice();
+        String desc
+                = "Name: " + selected.getName() + "\n"
+                + "Type: " + selected.getType() + "\n"
+                + "Status: " + selected.getStatus() + "\n"
+                + "Available Qty: " + selected.getQuantity() + "\n"
+                + "Price: " + selected.getPrice();
 
-    panel.add(new JLabel("<html>" + desc.replace("\n", "<br>") + "</html>"));
-    panel.add(new JLabel(" "));
+        panel.add(new JLabel("<html>" + desc.replace("\n", "<br>") + "</html>"));
+        panel.add(new JLabel(" "));
 
-    int maxQty = selected.getQuantity();
-    if (maxQty <= 0) {
-        JOptionPane.showMessageDialog(this, "This product is out of stock.");
-        return;
-    }
+        int maxQty = selected.getQuantity();
+        if (maxQty <= 0) {
+            JOptionPane.showMessageDialog(this, "This product is out of stock.");
+            return;
+        }
 
-    SpinnerNumberModel model = new SpinnerNumberModel(1, 1, maxQty, 1);
-    JSpinner spinner = new JSpinner(model);
+        SpinnerNumberModel model = new SpinnerNumberModel(1, 1, maxQty, 1);
+        JSpinner spinner = new JSpinner(model);
 
-    JPanel qtyPanel = new JPanel();
-    qtyPanel.add(new JLabel("Quantity: "));
-    qtyPanel.add(spinner);
-    panel.add(qtyPanel);
+        JPanel qtyPanel = new JPanel();
+        qtyPanel.add(new JLabel("Quantity: "));
+        qtyPanel.add(spinner);
+        panel.add(qtyPanel);
 
-    int option = JOptionPane.showConfirmDialog(
-            this,
-            panel,
-            "Add to Cart",
-            JOptionPane.OK_CANCEL_OPTION,
-            JOptionPane.INFORMATION_MESSAGE
-    );
+        int option = JOptionPane.showConfirmDialog(
+                this,
+                panel,
+                "Add to Cart",
+                JOptionPane.OK_CANCEL_OPTION,
+                JOptionPane.INFORMATION_MESSAGE
+        );
 
-    if (option != JOptionPane.OK_OPTION) return;
+        if (option != JOptionPane.OK_OPTION) {
+            return;
+        }
 
-    int qty = ((Integer) spinner.getValue()).intValue();
+        int qty = ((Integer) spinner.getValue()).intValue();
 
-    try {
-        cartController.addToCart(selected, qty);   // controller updates stock/status + pushes to stack
-        refreshTable();
-        refreshCartTable();
-    } catch (IllegalArgumentException ex) {
-        JOptionPane.showMessageDialog(this, ex.getMessage());
-    }
+        try {
+            cartController.addToCart(selected, qty);   // controller updates stock/status + pushes to stack
+            refreshTable();
+            refreshCartTable();
+        } catch (IllegalArgumentException ex) {
+            JOptionPane.showMessageDialog(this, ex.getMessage());
+        }
 
 
     }//GEN-LAST:event_addToCartActionPerformed
 
     private void updateCartQuantityActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateCartQuantityActionPerformed
         // TODO add your handling code here:
-        
-   
-    int cartRow = jTable1.getSelectedRow();
-    if (cartRow == -1) {
-        JOptionPane.showMessageDialog(this, "Select an item in the cart first.");
-        return;
-    }
 
-    CartItem item = cartStack.getAt(cartRow);
-    if (item == null) {
-        JOptionPane.showMessageDialog(this, "Invalid cart selection.");
-        return;
-    }
+        int cartRow = jTable1.getSelectedRow();
+        if (cartRow == -1) {
+            JOptionPane.showMessageDialog(this, "Select an item in the cart first.");
+            return;
+        }
 
-    PCComponent pc = item.getComponent();
-    int oldQty = item.getQuantity();
+        CartItem item = cartStack.getAt(cartRow);
+        if (item == null) {
+            JOptionPane.showMessageDialog(this, "Invalid cart selection.");
+            return;
+        }
 
-    int maxAllowed = pc.getQuantity() + oldQty;
-    if (maxAllowed <= 0) {
-        JOptionPane.showMessageDialog(this, "This product is out of stock.");
-        return;
-    }
+        PCComponent pc = item.getComponent();
+        int oldQty = item.getQuantity();
 
-    JSpinner spinner = new JSpinner(new SpinnerNumberModel(oldQty, 1, maxAllowed, 1));
+        int maxAllowed = pc.getQuantity() + oldQty;
+        if (maxAllowed <= 0) {
+            JOptionPane.showMessageDialog(this, "This product is out of stock.");
+            return;
+        }
 
-    int option = JOptionPane.showConfirmDialog(
-            this,
-            spinner,
-            "Update quantity (max " + maxAllowed + ")",
-            JOptionPane.OK_CANCEL_OPTION,
-            JOptionPane.QUESTION_MESSAGE
-    );
+        JSpinner spinner = new JSpinner(new SpinnerNumberModel(oldQty, 1, maxAllowed, 1));
 
-    if (option != JOptionPane.OK_OPTION) return;
+        int option = JOptionPane.showConfirmDialog(
+                this,
+                spinner,
+                "Update quantity (max " + maxAllowed + ")",
+                JOptionPane.OK_CANCEL_OPTION,
+                JOptionPane.QUESTION_MESSAGE
+        );
 
-    int newQty = ((Integer) spinner.getValue()).intValue();
+        if (option != JOptionPane.OK_OPTION) {
+            return;
+        }
 
-    try {
-        cartController.updateCartQuantityAt(cartRow, newQty);
-        refreshTable();
+        int newQty = ((Integer) spinner.getValue()).intValue();
+
+        try {
+            cartController.updateCartQuantityAt(cartRow, newQty);
+            refreshTable();
+            refreshCartTable();
+        } catch (IllegalArgumentException ex) {
+            JOptionPane.showMessageDialog(this, ex.getMessage());
+        }
+    }//GEN-LAST:event_updateCartQuantityActionPerformed
+
+    private void placeOrderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_placeOrderActionPerformed
+        // TODO add your handling code here:
+        try {
+        Model.Order order = orderController.placeOrder(username, cartStack);
         refreshCartTable();
+
+        JOptionPane.showMessageDialog(
+                this,
+                "Order placed!\nUser: " + order.getUsername()
+                        + "\nDate: " + order.getOrderDateTime()
+                        + "\nTotal: " + order.getTotal()
+        );
     } catch (IllegalArgumentException ex) {
         JOptionPane.showMessageDialog(this, ex.getMessage());
     }
-    }//GEN-LAST:event_updateCartQuantityActionPerformed
+    }//GEN-LAST:event_placeOrderActionPerformed
 
     /**
      * @param args the command line arguments
@@ -680,80 +709,81 @@ public class UserView extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(() -> new UserView().setVisible(true));
     }
     private PCComponentController controller = new PCComponentController();
-    
+
     private void setupCartTableModel() {
-    jTable1.setModel(new DefaultTableModel(
-            new Object[][]{},
-            new String[]{"Image", "Name", "Component Type", "Quantity", "Unit Price", "Total"}
-    ) {
-        @Override
-        public Class<?> getColumnClass(int columnIndex) {
-            if (columnIndex == 0) {
-                return Icon.class; // Image column [web:175][web:406]
+        jTable1.setModel(new DefaultTableModel(
+                new Object[][]{},
+                new String[]{"Image", "Name", "Component Type", "Quantity", "Unit Price", "Total"}
+        ) {
+            @Override
+            public Class<?> getColumnClass(int columnIndex) {
+                if (columnIndex == 0) {
+                    return Icon.class; // Image column [web:175][web:406]
+                }
+                return Object.class;
             }
-            return Object.class;
-        }
 
-        @Override
-        public boolean isCellEditable(int row, int column) {
-            return false;
-        }
-    });
-}
-
-
-  private void refreshTable() {
-    tableModel.setData(PCComponent.getComponents());
-}
-
-
-   private void refreshCartTable() {
-
-    DefaultTableModel cartModel = (DefaultTableModel) jTable1.getModel();
-    cartModel.setRowCount(0);
-
-    java.util.List<CartItem> items = cartStack.toList();
-
-    for (int i = 0; i < items.size(); i++) {
-        CartItem ci = items.get(i);
-        PCComponent pc = ci.getComponent();
-
-        ImageIcon cartThumb = makeCartThumbnail(pc.getImagePath(), 120, 120);
-
-        cartModel.addRow(new Object[]{
-            cartThumb,
-            pc.getName(),
-            pc.getType(),
-            ci.getQuantity(),
-            pc.getPrice(),
-            ci.getTotalPrice()
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
         });
     }
-}
-   private ImageIcon makeCartThumbnail(String imagePath, int w, int h) {
-    if (imagePath == null || imagePath.trim().isEmpty()) return null;
 
-    ImageIcon icon = null;
-
-    // resource path (predefined): "/images/x.png"
-    if (imagePath.startsWith("/")) {
-        URL url = getClass().getResource(imagePath);
-        if (url != null) {
-            icon = new ImageIcon(url);
-        }
-    } else {
-        // file path (chosen by user)
-        icon = new ImageIcon(imagePath);
+    private void refreshTable() {
+        tableModel.setData(PCComponent.getComponents());
     }
 
-    if (icon == null) return null;
+    private void refreshCartTable() {
 
-    Image img = icon.getImage();
-    Image scaled = img.getScaledInstance(w, h, Image.SCALE_SMOOTH);
-    return new ImageIcon(scaled);
-}
+        DefaultTableModel cartModel = (DefaultTableModel) jTable1.getModel();
+        cartModel.setRowCount(0);
 
+        java.util.List<CartItem> items = cartStack.toList();
 
+        for (int i = 0; i < items.size(); i++) {
+            CartItem ci = items.get(i);
+            PCComponent pc = ci.getComponent();
+
+            ImageIcon cartThumb = makeCartThumbnail(pc.getImagePath(), 120, 120);
+
+            cartModel.addRow(new Object[]{
+                cartThumb,
+                pc.getName(),
+                pc.getType(),
+                ci.getQuantity(),
+                pc.getPrice(),
+                ci.getTotalPrice()
+            });
+        }
+    }
+
+    private ImageIcon makeCartThumbnail(String imagePath, int w, int h) {
+        if (imagePath == null || imagePath.trim().isEmpty()) {
+            return null;
+        }
+
+        ImageIcon icon = null;
+
+        // resource path (predefined): "/images/x.png"
+        if (imagePath.startsWith("/")) {
+            URL url = getClass().getResource(imagePath);
+            if (url != null) {
+                icon = new ImageIcon(url);
+            }
+        } else {
+            // file path (chosen by user)
+            icon = new ImageIcon(imagePath);
+        }
+
+        if (icon == null) {
+            return null;
+        }
+
+        Image img = icon.getImage();
+        Image scaled = img.getScaledInstance(w, h, Image.SCALE_SMOOTH);
+        return new ImageIcon(scaled);
+    }
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

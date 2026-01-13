@@ -106,5 +106,11 @@ public class CartStack {
         }
         return false;
     }
+    public void clear() {
+    while (pop() != null) {
+        // keep popping
+    }
+}
+
 
 }

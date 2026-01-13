@@ -123,7 +123,7 @@ public class LoginController {
         if ("ADMIN".equals(acc.getRole())) {
             new AdminDashboard().setVisible(true);
         } else {
-            new UserView().setVisible(true);
+            new UserView(username).setVisible(true);
         }
         
         //closes the login window after successful login

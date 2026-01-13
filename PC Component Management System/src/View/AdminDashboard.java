@@ -110,6 +110,10 @@ public class AdminDashboard extends javax.swing.JFrame {
         updateCancelBtn = new javax.swing.JButton();
         jLabel17 = new javax.swing.JLabel();
         updateProductBackbtn = new javax.swing.JButton();
+        OrderPanel = new javax.swing.JPanel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        OrderTable = new javax.swing.JTable();
+        ViewOrderBtn = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -227,7 +231,7 @@ public class AdminDashboard extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(ViewProductPanelLayout.createSequentialGroup()
                         .addGap(18, 18, 18)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 471, Short.MAX_VALUE)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 426, Short.MAX_VALUE)
                         .addGap(18, 18, 18)))
                 .addComponent(AddProductBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -427,19 +431,64 @@ public class AdminDashboard extends javax.swing.JFrame {
 
         AdminSmartPanel.add(UpdateProductPanel, "card4");
 
+        OrderTable.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Order ID", "Username", "Date", "Total"
+            }
+        ));
+        jScrollPane2.setViewportView(OrderTable);
+
+        javax.swing.GroupLayout OrderPanelLayout = new javax.swing.GroupLayout(OrderPanel);
+        OrderPanel.setLayout(OrderPanelLayout);
+        OrderPanelLayout.setHorizontalGroup(
+            OrderPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(OrderPanelLayout.createSequentialGroup()
+                .addGap(146, 146, 146)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 696, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(148, Short.MAX_VALUE))
+        );
+        OrderPanelLayout.setVerticalGroup(
+            OrderPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(OrderPanelLayout.createSequentialGroup()
+                .addGap(72, 72, 72)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 293, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(317, Short.MAX_VALUE))
+        );
+
+        AdminSmartPanel.add(OrderPanel, "card5");
+
+        ViewOrderBtn.setText("View Order");
+        ViewOrderBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ViewOrderBtnActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
             .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(AdminSmartPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                .addGap(30, 30, 30)
+                .addComponent(ViewOrderBtn)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(AdminSmartPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 16, Short.MAX_VALUE)
+                .addComponent(ViewOrderBtn)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(AdminSmartPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         pack();
@@ -630,6 +679,14 @@ public class AdminDashboard extends javax.swing.JFrame {
         AdminSmartPanel.revalidate();
     }//GEN-LAST:event_updateCancelBtnActionPerformed
 
+    private void ViewOrderBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ViewOrderBtnActionPerformed
+        // TODO add your handling code here:
+         AdminSmartPanel.removeAll();
+        AdminSmartPanel.add(OrderPanel);
+        AdminSmartPanel.repaint();
+        AdminSmartPanel.revalidate();
+    }//GEN-LAST:event_ViewOrderBtnActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -667,6 +724,8 @@ public class AdminDashboard extends javax.swing.JFrame {
     private javax.swing.JTextField ComponentPriceField;
     private javax.swing.JTextField ComponentPriceField1;
     private javax.swing.JButton ConfirmUpdateBtn;
+    private javax.swing.JPanel OrderPanel;
+    private javax.swing.JTable OrderTable;
     private javax.swing.JTextField QuantityField;
     private javax.swing.JTextField QuantityField1;
     private javax.swing.JButton RemoveProdductBtn;
@@ -674,6 +733,7 @@ public class AdminDashboard extends javax.swing.JFrame {
     private javax.swing.JComboBox<String> StatusComboBox1;
     private javax.swing.JButton UpdateProduct;
     private javax.swing.JPanel UpdateProductPanel;
+    private javax.swing.JButton ViewOrderBtn;
     private javax.swing.JPanel ViewProductPanel;
     private javax.swing.JButton addProductBack;
     private javax.swing.JButton addProductClear;
@@ -700,6 +760,7 @@ public class AdminDashboard extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTextField nameField;
     private javax.swing.JTextField nameField1;
     private javax.swing.JButton updateCancelBtn;
