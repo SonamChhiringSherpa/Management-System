@@ -88,13 +88,30 @@ public class PCComponentTableModel extends AbstractTableModel {
     }
 
     private ImageIcon makeThumbnail(String imagePath) {
-        if (imagePath == null) return null;
-        if (imagePath.trim().length() == 0) return null;
+        if (imagePath == null || imagePath.trim().isEmpty()) {
+            return null;
+        }
 
-        ImageIcon icon = new ImageIcon(imagePath);
+        ImageIcon icon = null;
+
+        // If you saved "/images/x.png" for predefined components
+        if (imagePath.startsWith("/")) {
+            java.net.URL url = getClass().getResource(imagePath);
+            if (url != null) {
+                icon = new ImageIcon(url);
+            }
+        } else {
+            // user browsed file => absolute path
+            icon = new ImageIcon(imagePath);
+        }
+
+        if (icon == null) {
+            return null;
+        }
+
         Image img = icon.getImage();
         Image scaled = img.getScaledInstance(thumbW, thumbH, Image.SCALE_SMOOTH);
         return new ImageIcon(scaled);
     }
-}
 
+}

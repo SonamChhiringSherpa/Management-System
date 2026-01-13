@@ -45,7 +45,7 @@ public class AdminDashboard extends javax.swing.JFrame {
 
         AdminViewTable.setModel(tableModel);
         AdminViewTable.setRowSorter(sorter); // optional but useful (sorting) [web:418]
-        AdminViewTable.setRowHeight(90);
+        AdminViewTable.setRowHeight(130);
 
         PCComponent.initDummyData();
         loadTableData();
@@ -505,6 +505,7 @@ public class AdminDashboard extends javax.swing.JFrame {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
         JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setCurrentDirectory(new File("src/images"));
         int result = fileChooser.showOpenDialog(this);
 
         if (result == JFileChooser.APPROVE_OPTION) {
@@ -598,6 +599,7 @@ public class AdminDashboard extends javax.swing.JFrame {
     private void updateProductBrowseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateProductBrowseActionPerformed
         // TODO add your handling code here:
         JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setCurrentDirectory(new File("src/images"));
         int result = fileChooser.showOpenDialog(this);
 
         if (result == JFileChooser.APPROVE_OPTION) {
