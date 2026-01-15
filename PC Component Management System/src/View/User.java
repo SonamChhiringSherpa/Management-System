@@ -49,13 +49,15 @@ public class User extends javax.swing.JFrame {
         CartPanel = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         CartTable = new javax.swing.JTable();
-        Order = new javax.swing.JButton();
+        OrderBtn = new javax.swing.JButton();
         OrderPanel = new javax.swing.JPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
-        jButton1 = new javax.swing.JButton();
+        ViewOrderDetails = new javax.swing.JButton();
         jScrollPane4 = new javax.swing.JScrollPane();
         ProductTable1 = new javax.swing.JTable();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -75,7 +77,7 @@ public class User extends javax.swing.JFrame {
         HomePanel.setLayout(HomePanelLayout);
         HomePanelLayout.setHorizontalGroup(
             HomePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1300, Short.MAX_VALUE)
+            .addGap(0, 1325, Short.MAX_VALUE)
         );
         HomePanelLayout.setVerticalGroup(
             HomePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -179,7 +181,7 @@ public class User extends javax.swing.JFrame {
         );
 
         ProductPanel.add(FilterPanel);
-        FilterPanel.setBounds(0, 0, 1040, 93);
+        FilterPanel.setBounds(20, 10, 1040, 93);
 
         addToCart.setText("Add to Cart");
         addToCart.addActionListener(new java.awt.event.ActionListener() {
@@ -188,7 +190,7 @@ public class User extends javax.swing.JFrame {
             }
         });
         ProductPanel.add(addToCart);
-        addToCart.setBounds(1070, 100, 120, 40);
+        addToCart.setBounds(1080, 100, 120, 40);
 
         ProductTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -204,7 +206,7 @@ public class User extends javax.swing.JFrame {
         jScrollPane1.setViewportView(ProductTable);
 
         ProductPanel.add(jScrollPane1);
-        jScrollPane1.setBounds(0, 100, 1040, 610);
+        jScrollPane1.setBounds(20, 110, 1040, 590);
 
         jTabbedPane1.addTab("Product", ProductPanel);
 
@@ -226,9 +228,14 @@ public class User extends javax.swing.JFrame {
         CartPanel.add(jScrollPane2);
         jScrollPane2.setBounds(10, 40, 1040, 550);
 
-        Order.setText("Order");
-        CartPanel.add(Order);
-        Order.setBounds(1080, 40, 150, 40);
+        OrderBtn.setText("Order");
+        OrderBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                OrderBtnActionPerformed(evt);
+            }
+        });
+        CartPanel.add(OrderBtn);
+        OrderBtn.setBounds(1080, 40, 150, 40);
 
         jTabbedPane1.addTab("Cart", CartPanel);
 
@@ -248,11 +255,16 @@ public class User extends javax.swing.JFrame {
         jScrollPane3.setViewportView(jTable1);
 
         OrderPanel.add(jScrollPane3);
-        jScrollPane3.setBounds(0, 50, 680, 290);
+        jScrollPane3.setBounds(10, 50, 680, 290);
 
-        jButton1.setText("View Order Detail");
-        OrderPanel.add(jButton1);
-        jButton1.setBounds(30, 370, 140, 40);
+        ViewOrderDetails.setText("View Order Detail");
+        ViewOrderDetails.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ViewOrderDetailsActionPerformed(evt);
+            }
+        });
+        OrderPanel.add(ViewOrderDetails);
+        ViewOrderDetails.setBounds(30, 370, 140, 40);
 
         ProductTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -268,7 +280,17 @@ public class User extends javax.swing.JFrame {
         jScrollPane4.setViewportView(ProductTable1);
 
         OrderPanel.add(jScrollPane4);
-        jScrollPane4.setBounds(690, 50, 610, 530);
+        jScrollPane4.setBounds(700, 50, 620, 530);
+
+        jLabel1.setFont(new java.awt.Font("Helvetica Neue", 0, 14)); // NOI18N
+        jLabel1.setText("Order Detial");
+        OrderPanel.add(jLabel1);
+        jLabel1.setBounds(710, 20, 90, 18);
+
+        jLabel5.setFont(new java.awt.Font("Helvetica Neue", 0, 14)); // NOI18N
+        jLabel5.setText("Orders");
+        OrderPanel.add(jLabel5);
+        jLabel5.setBounds(20, 20, 60, 18);
 
         jTabbedPane1.addTab("Orders", OrderPanel);
 
@@ -315,6 +337,14 @@ public class User extends javax.swing.JFrame {
         
     }//GEN-LAST:event_addToCartActionPerformed
 
+    private void OrderBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_OrderBtnActionPerformed
+        
+    }//GEN-LAST:event_OrderBtnActionPerformed
+
+    private void ViewOrderDetailsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ViewOrderDetailsActionPerformed
+   
+    }//GEN-LAST:event_ViewOrderDetailsActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -346,18 +376,20 @@ public class User extends javax.swing.JFrame {
     private javax.swing.JPanel FilterPanel;
     private javax.swing.JPanel HomePanel;
     private javax.swing.JButton LogoutBtn;
-    private javax.swing.JButton Order;
+    private javax.swing.JButton OrderBtn;
     private javax.swing.JPanel OrderPanel;
     private javax.swing.JPanel ProductPanel;
     private javax.swing.JTable ProductTable;
     private javax.swing.JTable ProductTable1;
+    private javax.swing.JButton ViewOrderDetails;
     private javax.swing.JButton addToCart;
     private javax.swing.JComboBox<String> componentList_combobox;
     private javax.swing.JButton filterBtn;
-    private javax.swing.JButton jButton1;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
