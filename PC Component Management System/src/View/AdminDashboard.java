@@ -17,7 +17,9 @@ import javax.swing.table.DefaultTableModel;
 import Model.PCComponentTableModel;
 import javax.swing.table.TableRowSorter;
 import Controller.AdminOrderController;
+import Model.AdminDashboardHelper;
 import Model.Order;
+import java.awt.CardLayout;
 
 /**
  *
@@ -53,7 +55,8 @@ public class AdminDashboard extends javax.swing.JFrame {
         AdminViewTable.setRowHeight(130);
 
         PCComponent.initDummyData();
-        loadTableData();
+        AdminDashboardHelper.loadTableData(tableModel);
+
     }
 
     /**
@@ -88,7 +91,7 @@ public class AdminDashboard extends javax.swing.JFrame {
         jLabel6 = new javax.swing.JLabel();
         ComponentPriceField = new javax.swing.JTextField();
         jLabel7 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
+        addProductBorwseBtn = new javax.swing.JButton();
         jLabel8 = new javax.swing.JLabel();
         AddProduct = new javax.swing.JButton();
         StatusComboBox = new javax.swing.JComboBox<>();
@@ -211,7 +214,7 @@ public class AdminDashboard extends javax.swing.JFrame {
                     .addGroup(ViewProductPanelLayout.createSequentialGroup()
                         .addComponent(jLabel9)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 978, Short.MAX_VALUE))
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 986, Short.MAX_VALUE))
                     .addGroup(ViewProductPanelLayout.createSequentialGroup()
                         .addGap(21, 21, 21)
                         .addComponent(jLabel15)
@@ -222,7 +225,7 @@ public class AdminDashboard extends javax.swing.JFrame {
                 .addGroup(ViewProductPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(RemoveProdductBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(AddProductBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(UpdateProduct, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(UpdateProduct, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         ViewProductPanelLayout.setVerticalGroup(
@@ -237,7 +240,7 @@ public class AdminDashboard extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(ViewProductPanelLayout.createSequentialGroup()
                         .addGap(18, 18, 18)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 426, Short.MAX_VALUE)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 428, Short.MAX_VALUE)
                         .addGap(18, 18, 18)))
                 .addComponent(AddProductBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -253,46 +256,46 @@ public class AdminDashboard extends javax.swing.JFrame {
 
         jLabel2.setText("Name:");
         AddProductPanel.add(jLabel2);
-        jLabel2.setBounds(200, 140, 35, 16);
+        jLabel2.setBounds(200, 140, 35, 17);
         AddProductPanel.add(nameField);
-        nameField.setBounds(320, 140, 130, 22);
+        nameField.setBounds(320, 140, 130, 23);
 
         jLabel3.setText("Component Type:");
         AddProductPanel.add(jLabel3);
-        jLabel3.setBounds(200, 180, 96, 16);
+        jLabel3.setBounds(200, 180, 96, 17);
 
         CompTypeCombobox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { " ", "CPU", "GPU", "Motherboard", "RAM", "PSU" }));
         AddProductPanel.add(CompTypeCombobox);
-        CompTypeCombobox.setBounds(320, 180, 131, 22);
+        CompTypeCombobox.setBounds(320, 180, 131, 23);
 
         jLabel4.setText("Status:");
         AddProductPanel.add(jLabel4);
-        jLabel4.setBounds(200, 220, 35, 16);
+        jLabel4.setBounds(200, 220, 41, 17);
 
         jLabel5.setText("Quantity:");
         AddProductPanel.add(jLabel5);
-        jLabel5.setBounds(200, 260, 60, 16);
+        jLabel5.setBounds(200, 260, 60, 17);
         AddProductPanel.add(QuantityField);
-        QuantityField.setBounds(320, 260, 130, 22);
+        QuantityField.setBounds(320, 260, 130, 23);
 
         jLabel6.setText("Price:");
         AddProductPanel.add(jLabel6);
-        jLabel6.setBounds(200, 300, 40, 16);
+        jLabel6.setBounds(200, 300, 40, 17);
         AddProductPanel.add(ComponentPriceField);
-        ComponentPriceField.setBounds(320, 300, 130, 22);
+        ComponentPriceField.setBounds(320, 300, 130, 23);
 
         jLabel7.setText("Image:");
         AddProductPanel.add(jLabel7);
-        jLabel7.setBounds(200, 350, 50, 16);
+        jLabel7.setBounds(200, 350, 50, 17);
 
-        jButton1.setText("Browse");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        addProductBorwseBtn.setText("Browse");
+        addProductBorwseBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                addProductBorwseBtnActionPerformed(evt);
             }
         });
-        AddProductPanel.add(jButton1);
-        jButton1.setBounds(320, 350, 84, 23);
+        AddProductPanel.add(addProductBorwseBtn);
+        addProductBorwseBtn.setBounds(320, 350, 84, 23);
 
         jLabel8.setBackground(new java.awt.Color(255, 255, 255));
         jLabel8.setFont(new java.awt.Font("Helvetica Neue", 1, 18)); // NOI18N
@@ -311,12 +314,12 @@ public class AdminDashboard extends javax.swing.JFrame {
 
         StatusComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { " ", "Available", "Out of Stock" }));
         AddProductPanel.add(StatusComboBox);
-        StatusComboBox.setBounds(320, 220, 131, 22);
+        StatusComboBox.setBounds(320, 220, 131, 23);
 
         jLabel16.setFont(new java.awt.Font("Helvetica Neue", 1, 24)); // NOI18N
         jLabel16.setText("Add New Product");
         AddProductPanel.add(jLabel16);
-        jLabel16.setBounds(200, 80, 201, 32);
+        jLabel16.setBounds(200, 80, 201, 30);
 
         addProductClear.setText("Clear");
         addProductClear.addActionListener(new java.awt.event.ActionListener() {
@@ -330,7 +333,7 @@ public class AdminDashboard extends javax.swing.JFrame {
         jLabel20.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel20.setText("Image Preview");
         AddProductPanel.add(jLabel20);
-        jLabel20.setBounds(550, 140, 100, 20);
+        jLabel20.setBounds(550, 140, 100, 17);
 
         addProductBack.setText("Back");
         addProductBack.addActionListener(new java.awt.event.ActionListener() {
@@ -347,37 +350,37 @@ public class AdminDashboard extends javax.swing.JFrame {
 
         jLabel10.setText("Name:");
         UpdateProductPanel.add(jLabel10);
-        jLabel10.setBounds(200, 160, 35, 16);
+        jLabel10.setBounds(200, 160, 35, 17);
         UpdateProductPanel.add(nameField1);
-        nameField1.setBounds(310, 160, 130, 22);
+        nameField1.setBounds(310, 160, 130, 23);
 
         CompTypeCombobox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { " ", "CPU", "GPU", "Motherboard", "RAM", "PSU" }));
         UpdateProductPanel.add(CompTypeCombobox1);
-        CompTypeCombobox1.setBounds(310, 200, 130, 22);
+        CompTypeCombobox1.setBounds(310, 200, 130, 23);
 
         jLabel11.setText("Component Type:");
         UpdateProductPanel.add(jLabel11);
-        jLabel11.setBounds(200, 200, 96, 16);
+        jLabel11.setBounds(200, 200, 96, 17);
 
         jLabel12.setText("Status:");
         UpdateProductPanel.add(jLabel12);
-        jLabel12.setBounds(200, 240, 50, 16);
+        jLabel12.setBounds(200, 240, 50, 17);
 
         StatusComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { " ", "Available", "Out of Stock" }));
         UpdateProductPanel.add(StatusComboBox1);
-        StatusComboBox1.setBounds(310, 240, 131, 22);
+        StatusComboBox1.setBounds(310, 240, 131, 23);
 
         jLabel13.setText("Quantity:");
         UpdateProductPanel.add(jLabel13);
-        jLabel13.setBounds(200, 280, 60, 16);
+        jLabel13.setBounds(200, 280, 60, 17);
         UpdateProductPanel.add(QuantityField1);
-        QuantityField1.setBounds(310, 280, 130, 22);
+        QuantityField1.setBounds(310, 280, 130, 23);
 
         jLabel14.setText("Image:");
         UpdateProductPanel.add(jLabel14);
-        jLabel14.setBounds(200, 360, 50, 16);
+        jLabel14.setBounds(200, 360, 50, 17);
         UpdateProductPanel.add(ComponentPriceField1);
-        ComponentPriceField1.setBounds(310, 320, 130, 22);
+        ComponentPriceField1.setBounds(310, 320, 130, 23);
 
         updateProductBrowse.setText("Browse");
         updateProductBrowse.addActionListener(new java.awt.event.ActionListener() {
@@ -401,16 +404,16 @@ public class AdminDashboard extends javax.swing.JFrame {
             }
         });
         UpdateProductPanel.add(ConfirmUpdateBtn);
-        ConfirmUpdateBtn.setBounds(310, 410, 115, 23);
+        ConfirmUpdateBtn.setBounds(310, 410, 122, 23);
 
         jLabel18.setText("Price:");
         UpdateProductPanel.add(jLabel18);
-        jLabel18.setBounds(200, 320, 40, 16);
+        jLabel18.setBounds(200, 320, 40, 17);
 
         jLabel1.setFont(new java.awt.Font("Helvetica Neue", 1, 24)); // NOI18N
         jLabel1.setText("Update Product");
         UpdateProductPanel.add(jLabel1);
-        jLabel1.setBounds(200, 90, 179, 32);
+        jLabel1.setBounds(200, 90, 182, 30);
 
         updateCancelBtn.setText("Cancel");
         updateCancelBtn.addActionListener(new java.awt.event.ActionListener() {
@@ -508,10 +511,10 @@ public class AdminDashboard extends javax.swing.JFrame {
 
     private void AddProductBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AddProductBtnActionPerformed
         // TODO add your handling code here:
-        AdminSmartPanel.removeAll();
-        AdminSmartPanel.add(AddProductPanel);
-        AdminSmartPanel.repaint();
-        AdminSmartPanel.revalidate();
+
+        CardLayout cl = (CardLayout) (AdminSmartPanel.getLayout());
+        cl.show(AdminSmartPanel, "card2");
+
     }//GEN-LAST:event_AddProductBtnActionPerformed
 
     private void RemoveProdductBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RemoveProdductBtnActionPerformed
@@ -525,11 +528,12 @@ public class AdminDashboard extends javax.swing.JFrame {
         int modelRow = AdminViewTable.convertRowIndexToModel(viewRow);
         PCComponent comp = tableModel.getComponentAt(modelRow);
 
-        AdminHistoryController.recordDeletedProduct(comp);
+//        AdminHistoryController.recordDeletedProduct(comp);
         controller.deleteComponent(comp);
-
         JOptionPane.showMessageDialog(this, "Component deleted successfully");
-        loadTableData();
+        AdminDashboardHelper.loadTableData(tableModel);
+
+
     }//GEN-LAST:event_RemoveProdductBtnActionPerformed
 
     private void AdminLogoutBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AdminLogoutBtnActionPerformed
@@ -554,17 +558,24 @@ public class AdminDashboard extends javax.swing.JFrame {
         );
 
         if (success) {
-            JOptionPane.showMessageDialog(this,
-                    "Component added successfully");
-            loadTableData();
-            clearAddProductForm();
+            JOptionPane.showMessageDialog(this, "Component added successfully");
+            AdminDashboardHelper.loadTableData(tableModel);
+            AdminDashboardHelper.clearAddProductForm(
+                    nameField,
+                    CompTypeCombobox,
+                    StatusComboBox,
+                    QuantityField,
+                    ComponentPriceField,
+                    jLabel8
+            );
+            selectedImagePath = "";
         } else {
             JOptionPane.showMessageDialog(this,
                     "Invalid input. Please check all fields.");
         }
     }//GEN-LAST:event_AddProductActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void addProductBorwseBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addProductBorwseBtnActionPerformed
         // TODO add your handling code here:
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setCurrentDirectory(new File("src/images"));
@@ -574,11 +585,11 @@ public class AdminDashboard extends javax.swing.JFrame {
             File file = fileChooser.getSelectedFile();
             selectedImagePath = file.getAbsolutePath();
 
-            setPreviewImage(jLabel8, selectedImagePath, 190, 170);
+            AdminDashboardHelper.setPreviewImage(jLabel8, selectedImagePath, 190, 170);
         } else {
             JOptionPane.showMessageDialog(this, "No image selected.");
         }
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_addProductBorwseBtnActionPerformed
 
     private void UpdateProductActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_UpdateProductActionPerformed
         // TODO add your handling code here:
@@ -599,7 +610,7 @@ public class AdminDashboard extends javax.swing.JFrame {
 
         // preview current image in update panel
         updateSelectedImagePath = selectedComponent.getImagePath();
-        setPreviewImage(updateProduct_imagePreview, updateSelectedImagePath, 210, 170);
+        AdminDashboardHelper.setPreviewImage(updateProduct_imagePreview, updateSelectedImagePath, 210, 170);
 
         AdminSmartPanel.removeAll();
         AdminSmartPanel.add(UpdateProductPanel);
@@ -633,7 +644,7 @@ public class AdminDashboard extends javax.swing.JFrame {
             );
 
             JOptionPane.showMessageDialog(this, "Product updated successfully");
-            loadTableData();
+            AdminDashboardHelper.loadTableData(tableModel);
 
             AdminSmartPanel.removeAll();
             AdminSmartPanel.add(ViewProductPanel);
@@ -651,11 +662,21 @@ public class AdminDashboard extends javax.swing.JFrame {
         AdminSmartPanel.add(ViewProductPanel);
         AdminSmartPanel.repaint();
         AdminSmartPanel.revalidate();
+
     }//GEN-LAST:event_addProductBackActionPerformed
 
     private void addProductClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addProductClearActionPerformed
         // TODO add your handling code here:
-        clearAddProductForm();
+        AdminDashboardHelper.clearAddProductForm(
+                nameField,
+                CompTypeCombobox,
+                StatusComboBox,
+                QuantityField,
+                ComponentPriceField,
+                jLabel8
+        );
+        selectedImagePath = "";
+
     }//GEN-LAST:event_addProductClearActionPerformed
 
     private void updateProductBrowseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateProductBrowseActionPerformed
@@ -668,7 +689,7 @@ public class AdminDashboard extends javax.swing.JFrame {
             File file = fileChooser.getSelectedFile();
             updateSelectedImagePath = file.getAbsolutePath();
 
-            setPreviewImage(updateProduct_imagePreview, updateSelectedImagePath, 210, 170);
+            AdminDashboardHelper.setPreviewImage(updateProduct_imagePreview, updateSelectedImagePath, 210, 170);
         } else {
             JOptionPane.showMessageDialog(this, "No image selected.");
         }
@@ -684,7 +705,16 @@ public class AdminDashboard extends javax.swing.JFrame {
 
     private void updateCancelBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateCancelBtnActionPerformed
         // TODO add your handling code here:
-        clearUpdateProductForm();
+        AdminDashboardHelper.clearUpdateProductForm(
+                nameField1,
+                CompTypeCombobox1,
+                StatusComboBox1,
+                QuantityField1,
+                ComponentPriceField1,
+                updateProduct_imagePreview
+        );
+        updateSelectedImagePath = "";
+        selectedComponent = null;
 
         AdminSmartPanel.removeAll();
         AdminSmartPanel.add(ViewProductPanel);
@@ -696,9 +726,13 @@ public class AdminDashboard extends javax.swing.JFrame {
         // TODO add your handling code here:
         AdminSmartPanel.removeAll();
         AdminSmartPanel.add(OrderPanel);
-        refreshOrdersTable();
         AdminSmartPanel.repaint();
         AdminSmartPanel.revalidate();
+        AdminDashboardHelper.refreshOrdersTable(
+                OrderTable,
+                adminOrderController.getAllOrdersSnapshot()
+        );
+
 
     }//GEN-LAST:event_ViewOrderBtnActionPerformed
 
@@ -751,8 +785,8 @@ public class AdminDashboard extends javax.swing.JFrame {
     private javax.swing.JButton ViewOrderBtn;
     private javax.swing.JPanel ViewProductPanel;
     private javax.swing.JButton addProductBack;
+    private javax.swing.JButton addProductBorwseBtn;
     private javax.swing.JButton addProductClear;
-    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -784,91 +818,5 @@ public class AdminDashboard extends javax.swing.JFrame {
     private javax.swing.JLabel updateProduct_imagePreview;
     private javax.swing.JButton viewItems;
     // End of variables declaration//GEN-END:variables
-
-    private void setupTableModel() {
-        DefaultTableModel model = new DefaultTableModel(
-                new Object[][]{},
-                new String[]{"Name", "Component Type", "Status", "Quantity", "Price", "Image"}
-        ) {
-            @Override
-            public Class<?> getColumnClass(int columnIndex) {
-                if (columnIndex == 5) {
-                    // JTable uses this to choose default renderer/editor for the column [web:194][web:406]
-                    return javax.swing.Icon.class;
-                }
-                return Object.class;
-            }
-
-            @Override
-            public boolean isCellEditable(int row, int column) {
-                return false;
-            }
-        };
-
-        AdminViewTable.setModel(model);
-    }
-
-    private void loadTableData() {
-        tableModel.setData(PCComponent.getComponents());
-    }
-
-    private void setPreviewImage(javax.swing.JLabel label, String imagePath, int fallbackW, int fallbackH) {
-        if (imagePath == null || imagePath.trim().isEmpty()) {
-            label.setIcon(null);
-            label.setText("ImagePreview");
-            return;
-        }
-
-        ImageIcon icon = new ImageIcon(imagePath);
-        Image img = icon.getImage();
-
-        int w = label.getWidth();
-        int h = label.getHeight();
-
-        if (w <= 0 || h <= 0) {
-            w = fallbackW;
-            h = fallbackH;
-        }
-
-        Image scaledImg = img.getScaledInstance(w, h, Image.SCALE_SMOOTH);
-        label.setIcon(new ImageIcon(scaledImg));
-        label.setText("");
-    }
-
-    private void clearAddProductForm() {
-        nameField.setText("");
-        CompTypeCombobox.setSelectedIndex(0);
-        StatusComboBox.setSelectedIndex(0);
-        QuantityField.setText("");
-        ComponentPriceField.setText("");
-
-        selectedImagePath = "";
-        jLabel8.setIcon(null);
-        jLabel8.setText("ImagePreview");
-    }
-
-    private void clearUpdateProductForm() {
-        nameField1.setText("");
-        CompTypeCombobox1.setSelectedIndex(0);
-        StatusComboBox1.setSelectedIndex(0);
-        QuantityField1.setText("");
-        ComponentPriceField1.setText("");
-
-        updateSelectedImagePath = "";
-        updateProduct_imagePreview.setIcon(null);
-        updateProduct_imagePreview.setText("ImagePreview");
-
-        selectedComponent = null;
-    }
-
-    private void refreshOrdersTable() {
-        DefaultTableModel m = (DefaultTableModel) OrderTable.getModel();
-        m.setRowCount(0);
-
-        java.util.List<Order> orders = adminOrderController.getAllOrdersSnapshot();
-        for (Order o : orders) {
-            m.addRow(new Object[]{o.getOrderId(), o.getUsername(), o.getOrderDateTime(), o.getTotal()});
-        }
-    }
 
 }
