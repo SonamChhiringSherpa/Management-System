@@ -11,10 +11,19 @@ import java.util.LinkedList;
  * @author sonamchhiringsherpa
  */
 public class Inventory {
+
+    /**
+     * Shared inventory list. Admin will later add/remove/update products in
+     * this SAME list.
+     */
+    // One shared list for the whole program (Admin + User).
     private static final LinkedList<PCComponent> components = new LinkedList<>();
 
+    //Loads dummy data only once
     public static void initDummyDataIfEmpty() {
-        if (!components.isEmpty()) return;
+        if (!components.isEmpty()) {
+            return;
+        }
         //CPUs
         components.add(new PCComponent("Ryzen 5 5600X", "CPU", "Available", 2, 160.0, "/Image/AMD_Ryzen_5_5600X.jpg"));
         components.add(new PCComponent("Ryzen 7 5800X", "CPU", "Available", 3, 230.0, "/Image/Ryzen_7_5800X.jpg"));
@@ -48,20 +57,14 @@ public class Inventory {
 
     // called from Admin controller when admin adds new component
     public static void addComponent(PCComponent c) {
-        if (c == null) return;
+        if (c == null) {
+            return;
+        }
         components.add(c);                  // LinkedList append
     }
 
     public static LinkedList<PCComponent> getAll() {
         return components;                  // shared same list (Admin + User)
-    }
 
-    public static int size() {
-        return components.size();
-    }
-
-    public static PCComponent getAt(int index) {
-        if (index < 0 || index >= components.size()) return null;
-        return components.get(index);
     }
 }

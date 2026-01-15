@@ -4,113 +4,90 @@
  */
 package Model;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  *
  * @author user
  */
 public class CartStack {
 
-    private static class Node {
+    private CartItem[] data;
+    private int top; // points to next free position
 
-        CartItem item;
-        Node next;
-
-        Node(CartItem item) {
-            this.item = item;
-        }
-    }
-
-    private Node top;
-    private int size;
-
-    public void push(CartItem item) {
-        Node n = new Node(item);
-        n.next = top;
-        top = n;
-        size++;
-    }
-
-    public CartItem pop() {
-        if (top == null) {
-            return null;
-        }
-
-        CartItem item = top.item;
-        top = top.next;
-        size--;
-        return item;
-    }
-
-    public CartItem peek() {
-        if (top == null) {
-            return null;
-        }
-        return top.item;
+    public CartStack(int capacity) {
+        data = new CartItem[capacity];
+        top = 0;
     }
 
     public boolean isEmpty() {
-        return top == null;
+        return top == 0;
+    }
+
+    public boolean isFull() {
+        return top == data.length;
+    }
+
+    public void push(CartItem item) {
+        if (isFull()) {
+            return;
+        }
+        data[top] = item;
+        top++;
+    }
+
+    public CartItem pop() {
+        if (isEmpty()) {
+            return null;
+        }
+        top--;
+        CartItem item = data[top];
+        data[top] = null;
+        return item;
     }
 
     public int size() {
-        return size;
-    }
-
-    // Used to display items in JTable (top -> bottom)
-    public List<CartItem> toList() {
-        ArrayList<CartItem> out = new ArrayList<CartItem>();
-        Node cur = top;
-        while (cur != null) {
-            out.add(cur.item);
-            cur = cur.next;
-        }
-        return out;
+        return top;
     }
 
     public CartItem getAt(int index) {
-        if (index < 0 || index >= size) {
+        if (index < 0 || index >= top) {
             return null;
         }
+        return data[index];
+    }
 
-        Node cur = top;
-        int i = 0;
-        while (cur != null) {
-            if (i == index) {
-                return cur.item;
+    /**
+     * Finds an item by product name (linear scan inside stack). This helps "Add
+     * to cart" increase qty if already exists.
+     */
+    public int indexOfProductName(String name) {
+        if (name == null) {
+            return -1;
+        }
+        for (int i = 0; i < top; i++) {
+            CartItem ci = data[i];
+            if (ci != null && ci.getProduct().getName().equalsIgnoreCase(name)) {
+                return i;
             }
-            cur = cur.next;
-            i++;
         }
-        return null;
+        return -1;
     }
 
-    public boolean updateQuantityAt(int index, int newQty) {
-        if (index < 0 || index >= size) {
-            return false;
+    public void removeAt(int index) {
+        if (index < 0 || index >= top) {
+            return;
         }
 
-        Node cur = top;
-        int i = 0;
-        while (cur != null) {
-            if (i == index) {
-                // CartItem in my earlier version had no setter; easiest is replace object:
-                PCComponent pc = cur.item.getComponent();
-                cur.item = new CartItem(pc, newQty);
-                return true;
-            }
-            cur = cur.next;
-            i++;
+        for (int i = index; i < top - 1; i++) {
+            data[i] = data[i + 1];
         }
-        return false;
+        data[top - 1] = null;
+        top--;
     }
-    public void clear() {
-    while (pop() != null) {
-        // keep popping
+
+    public void setQtyAt(int index, int qty) {
+        CartItem ci = getAt(index);
+        if (ci != null) {
+            ci.setQty(qty);
+        }
     }
-}
-
-
 }

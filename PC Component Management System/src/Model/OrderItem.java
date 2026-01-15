@@ -8,16 +8,12 @@ package Model;
  *
  * @author user
  */
-public class CartItem {
+public class OrderItem {
 
-    /**
-     * One item in the cart. Keeps quantity and lets table show Total = qty *
-     * price.
-     */
-    private PCComponent product;
+    private PCComponent product; // snapshot copy
     private int qty;
 
-    public CartItem(PCComponent product, int qty) {
+    public OrderItem(PCComponent product, int qty) {
         this.product = product;
         this.qty = qty;
     }
@@ -28,10 +24,6 @@ public class CartItem {
 
     public int getQty() {
         return qty;
-    }
-
-    public void setQty(int qty) {
-        this.qty = qty;
     }
 
     public double getTotal() {

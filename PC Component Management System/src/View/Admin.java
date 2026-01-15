@@ -4,12 +4,29 @@
  */
 package View;
 
+import Controller.AdminController;
+import Model.Inventory;
+import Model.ProductTableModel;
+
 /**
  *
  * @author sonamchhiringsherpa
  */
 public class Admin extends javax.swing.JFrame {
-    
+
+    private final Controller.ImagePreviewer imagePreviewer = new Controller.ImagePreviewer();
+
+    private String selectedAddImagePath = null;
+    private String selectedUpdateImagePath = null;
+
+    private Model.PCComponent selectedForUpdate = null;
+
+    private static final String CARD_PRODUCTS = "products";
+    private static final String CARD_UPDATE = "update";
+
+    private final AdminController controller = new AdminController();
+    private final ProductTableModel productModel = new ProductTableModel(240, 160);
+
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(Admin.class.getName());
 
     /**
@@ -17,6 +34,26 @@ public class Admin extends javax.swing.JFrame {
      */
     public Admin() {
         initComponents();
+        Inventory.initDummyDataIfEmpty();
+
+        java.awt.CardLayout cl = (java.awt.CardLayout) SmartProductPanel.getLayout();
+        cl.show(SmartProductPanel, CARD_PRODUCTS);
+
+        // show products in admin table (same as user)
+        AdminViewTable.setModel(productModel);
+        AdminViewTable.setRowHeight(180);
+        AdminViewTable.getColumnModel().getColumn(5).setPreferredWidth(300);
+        AdminViewTable.getColumnModel().getColumn(5).setMinWidth(300);
+        AdminViewTable.getColumnModel().getColumn(5).setMaxWidth(350);
+
+        // optional: fill columns to available width
+        AdminViewTable.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_ALL_COLUMNS);
+
+        // load data (shared list)
+        productModel.setData(controller.getInventory());
+
+        StatusField.setEditable(false);
+
     }
 
     /**
@@ -39,6 +76,7 @@ public class Admin extends javax.swing.JFrame {
         AdminViewTable = new javax.swing.JTable();
         UpdateProductBtn = new javax.swing.JButton();
         RemoveProdductBtn = new javax.swing.JButton();
+        jLabel9 = new javax.swing.JLabel();
         UpdatePanel = new javax.swing.JPanel();
         jLabel10 = new javax.swing.JLabel();
         updateNameField = new javax.swing.JTextField();
@@ -79,7 +117,7 @@ public class Admin extends javax.swing.JFrame {
         jPanel5 = new javax.swing.JPanel();
         jPanel6 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
-        AdminViewTable1 = new javax.swing.JTable();
+        RemovedProductTable = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -88,7 +126,7 @@ public class Admin extends javax.swing.JFrame {
         jLabel2.setFont(new java.awt.Font("Kannada Sangam MN", 1, 36)); // NOI18N
         jLabel2.setText("PC Hardware Vault");
         jPanel1.add(jLabel2);
-        jLabel2.setBounds(60, 30, 590, 59);
+        jLabel2.setBounds(60, 30, 590, 47);
 
         LogoutBtn.setFont(new java.awt.Font("Helvetica Neue", 0, 18)); // NOI18N
         LogoutBtn.setText("Logout");
@@ -96,6 +134,8 @@ public class Admin extends javax.swing.JFrame {
         LogoutBtn.setBounds(1160, 30, 90, 50);
 
         SmartProductPanel.setLayout(new java.awt.CardLayout());
+
+        ProductPanel.setBackground(new java.awt.Color(255, 255, 255));
 
         AdminViewTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -124,67 +164,77 @@ public class Admin extends javax.swing.JFrame {
             }
         });
 
+        jLabel9.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jLabel9.setText("Product List");
+
         javax.swing.GroupLayout ProductPanelLayout = new javax.swing.GroupLayout(ProductPanel);
         ProductPanel.setLayout(ProductPanelLayout);
         ProductPanelLayout.setHorizontalGroup(
             ProductPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(ProductPanelLayout.createSequentialGroup()
-                .addGap(151, 151, 151)
                 .addGroup(ProductPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(ProductPanelLayout.createSequentialGroup()
-                        .addComponent(UpdateProductBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(26, 26, 26)
-                        .addComponent(RemoveProdductBtn)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addContainerGap()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 1045, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(36, 36, 36)
+                        .addGroup(ProductPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(UpdateProductBtn, javax.swing.GroupLayout.DEFAULT_SIZE, 127, Short.MAX_VALUE)
+                            .addComponent(RemoveProdductBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                     .addGroup(ProductPanelLayout.createSequentialGroup()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 986, Short.MAX_VALUE)
-                        .addGap(163, 163, 163))))
+                        .addGap(15, 15, 15)
+                        .addComponent(jLabel9)))
+                .addContainerGap(86, Short.MAX_VALUE))
         );
         ProductPanelLayout.setVerticalGroup(
             ProductPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(ProductPanelLayout.createSequentialGroup()
-                .addGap(48, 48, 48)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 428, Short.MAX_VALUE)
-                .addGap(39, 39, 39)
-                .addGroup(ProductPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(UpdateProductBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(RemoveProdductBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(162, 162, 162))
+                .addGap(15, 15, 15)
+                .addComponent(jLabel9)
+                .addGap(18, 18, 18)
+                .addGroup(ProductPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 645, Short.MAX_VALUE)
+                    .addGroup(ProductPanelLayout.createSequentialGroup()
+                        .addComponent(UpdateProductBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(RemoveProdductBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
         );
 
-        SmartProductPanel.add(ProductPanel, "card2");
+        SmartProductPanel.add(ProductPanel, "CARD_PRODUCTS");
 
+        UpdatePanel.setBackground(new java.awt.Color(255, 255, 255));
         UpdatePanel.setLayout(null);
 
         jLabel10.setText("Name:");
         UpdatePanel.add(jLabel10);
-        jLabel10.setBounds(190, 160, 70, 17);
+        jLabel10.setBounds(190, 160, 70, 16);
         UpdatePanel.add(updateNameField);
-        updateNameField.setBounds(310, 160, 130, 23);
+        updateNameField.setBounds(310, 160, 130, 22);
 
         CompTypeCombobox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { " ", "CPU", "GPU", "Motherboard", "RAM", "PSU" }));
         UpdatePanel.add(CompTypeCombobox);
-        CompTypeCombobox.setBounds(310, 200, 130, 23);
+        CompTypeCombobox.setBounds(310, 200, 130, 22);
 
         jLabel11.setText("Component Type:");
         UpdatePanel.add(jLabel11);
-        jLabel11.setBounds(190, 200, 110, 17);
+        jLabel11.setBounds(190, 200, 110, 16);
 
         jLabel12.setText("Status:");
         UpdatePanel.add(jLabel12);
-        jLabel12.setBounds(190, 280, 50, 17);
+        jLabel12.setBounds(190, 280, 50, 16);
 
         jLabel13.setText("Quantity:");
         UpdatePanel.add(jLabel13);
-        jLabel13.setBounds(190, 240, 60, 17);
+        jLabel13.setBounds(190, 240, 60, 16);
         UpdatePanel.add(StatusField);
-        StatusField.setBounds(310, 280, 130, 23);
+        StatusField.setBounds(310, 280, 130, 22);
 
         jLabel14.setText("Image:");
         UpdatePanel.add(jLabel14);
-        jLabel14.setBounds(190, 360, 50, 17);
+        jLabel14.setBounds(190, 360, 50, 16);
         UpdatePanel.add(updatePriceField);
-        updatePriceField.setBounds(310, 320, 130, 23);
+        updatePriceField.setBounds(310, 320, 130, 22);
 
         updateProductBrowse.setText("Browse");
         updateProductBrowse.addActionListener(new java.awt.event.ActionListener() {
@@ -208,16 +258,16 @@ public class Admin extends javax.swing.JFrame {
             }
         });
         UpdatePanel.add(ConfirmUpdateBtn);
-        ConfirmUpdateBtn.setBounds(310, 410, 122, 23);
+        ConfirmUpdateBtn.setBounds(310, 410, 115, 23);
 
         jLabel18.setText("Price:");
         UpdatePanel.add(jLabel18);
-        jLabel18.setBounds(190, 320, 40, 17);
+        jLabel18.setBounds(190, 320, 40, 16);
 
         jLabel1.setFont(new java.awt.Font("Helvetica Neue", 1, 24)); // NOI18N
         jLabel1.setText("Update Product");
         UpdatePanel.add(jLabel1);
-        jLabel1.setBounds(190, 90, 182, 30);
+        jLabel1.setBounds(190, 90, 179, 32);
 
         updateCancelBtn.setText("Cancel");
         updateCancelBtn.addActionListener(new java.awt.event.ActionListener() {
@@ -241,48 +291,55 @@ public class Admin extends javax.swing.JFrame {
         });
         UpdatePanel.add(updateProductBackbtn);
         updateProductBackbtn.setBounds(40, 40, 72, 23);
-        UpdatePanel.add(updateProductQtySpinner);
-        updateProductQtySpinner.setBounds(310, 240, 64, 23);
 
-        SmartProductPanel.add(UpdatePanel, "card3");
+        updateProductQtySpinner.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                updateProductQtySpinnerStateChanged(evt);
+            }
+        });
+        UpdatePanel.add(updateProductQtySpinner);
+        updateProductQtySpinner.setBounds(310, 240, 64, 22);
+
+        SmartProductPanel.add(UpdatePanel, "CARD_UPDATE");
 
         jTabbedPane1.addTab("Products", SmartProductPanel);
 
+        AddProductPanel.setBackground(new java.awt.Color(255, 255, 255));
         AddProductPanel.setLayout(null);
 
         jLabel3.setText("Name:");
         AddProductPanel.add(jLabel3);
-        jLabel3.setBounds(200, 140, 70, 17);
+        jLabel3.setBounds(200, 140, 70, 16);
         AddProductPanel.add(nameField);
-        nameField.setBounds(320, 140, 130, 23);
+        nameField.setBounds(320, 140, 130, 22);
 
         jLabel4.setText("Component Type:");
         AddProductPanel.add(jLabel4);
-        jLabel4.setBounds(200, 180, 110, 17);
+        jLabel4.setBounds(200, 180, 110, 16);
 
         CompTypeCombobox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { " ", "CPU", "GPU", "Motherboard", "RAM", "PSU" }));
         AddProductPanel.add(CompTypeCombobox1);
-        CompTypeCombobox1.setBounds(320, 180, 131, 23);
+        CompTypeCombobox1.setBounds(320, 180, 131, 22);
 
         jLabel5.setText("Status:");
         AddProductPanel.add(jLabel5);
-        jLabel5.setBounds(200, 260, 41, 17);
+        jLabel5.setBounds(200, 260, 60, 16);
 
         jLabel6.setText("Quantity:");
         AddProductPanel.add(jLabel6);
-        jLabel6.setBounds(200, 220, 60, 17);
+        jLabel6.setBounds(200, 220, 80, 16);
         AddProductPanel.add(addProductStatusField);
-        addProductStatusField.setBounds(320, 260, 130, 23);
+        addProductStatusField.setBounds(320, 260, 130, 22);
 
         jLabel7.setText("Price:");
         AddProductPanel.add(jLabel7);
-        jLabel7.setBounds(200, 300, 40, 17);
+        jLabel7.setBounds(200, 300, 40, 16);
         AddProductPanel.add(ComponentPriceField);
-        ComponentPriceField.setBounds(320, 300, 130, 23);
+        ComponentPriceField.setBounds(320, 300, 130, 22);
 
         jLabel8.setText("Image:");
         AddProductPanel.add(jLabel8);
-        jLabel8.setBounds(200, 350, 50, 17);
+        jLabel8.setBounds(200, 350, 50, 16);
 
         addProductBorwseBtn.setText("Browse");
         addProductBorwseBtn.addActionListener(new java.awt.event.ActionListener() {
@@ -311,7 +368,7 @@ public class Admin extends javax.swing.JFrame {
         jLabel16.setFont(new java.awt.Font("Helvetica Neue", 1, 24)); // NOI18N
         jLabel16.setText("Add New Product");
         AddProductPanel.add(jLabel16);
-        jLabel16.setBounds(200, 80, 230, 30);
+        jLabel16.setBounds(200, 80, 230, 32);
 
         addProductClear.setText("Clear");
         addProductClear.addActionListener(new java.awt.event.ActionListener() {
@@ -325,11 +382,13 @@ public class Admin extends javax.swing.JFrame {
         jLabel20.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel20.setText("Image Preview");
         AddProductPanel.add(jLabel20);
-        jLabel20.setBounds(550, 130, 110, 17);
+        jLabel20.setBounds(550, 130, 110, 20);
         AddProductPanel.add(addProductQtySpinner);
-        addProductQtySpinner.setBounds(320, 220, 64, 23);
+        addProductQtySpinner.setBounds(320, 220, 64, 22);
 
         jTabbedPane1.addTab("Add Product", AddProductPanel);
+
+        jPanel5.setBackground(new java.awt.Color(255, 255, 255));
 
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
@@ -344,7 +403,9 @@ public class Admin extends javax.swing.JFrame {
 
         jTabbedPane1.addTab("Orders", jPanel5);
 
-        AdminViewTable1.setModel(new javax.swing.table.DefaultTableModel(
+        jPanel6.setBackground(new java.awt.Color(255, 255, 255));
+
+        RemovedProductTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null, null},
                 {null, null, null, null, null, null},
@@ -355,7 +416,7 @@ public class Admin extends javax.swing.JFrame {
                 "Name", "Component Type", "Status", "Quantity", "Price", "Image"
             }
         ));
-        jScrollPane2.setViewportView(AdminViewTable1);
+        jScrollPane2.setViewportView(RemovedProductTable);
 
         javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
         jPanel6.setLayout(jPanel6Layout);
@@ -401,48 +462,157 @@ public class Admin extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void UpdateProductBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_UpdateProductBtnActionPerformed
-        
+        int viewRow = AdminViewTable.getSelectedRow();
+        if (viewRow == -1) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Select a product first.");
+            return;
+        }
+
+        int modelRow = AdminViewTable.convertRowIndexToModel(viewRow);
+
+        Model.PCComponent pc = productModel.getAt(modelRow);
+        if (pc == null) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Selected product not found.");
+            return;
+        }
+
+        selectedForUpdate = pc;
+
+        // auto fill fields
+        updateNameField.setText(pc.getName());
+        updateNameField.setEditable(false);
+
+        CompTypeCombobox.setSelectedItem(pc.getType());
+        updateProductQtySpinner.setValue(Integer.valueOf(pc.getQuantity()));
+        updatePriceField.setText(String.valueOf(pc.getPrice()));
+
+        StatusField.setEditable(false);
+        StatusField.setText(pc.getQuantity() > 0 ? "Available" : "Out of Stock");
+
+        // auto fill image preview
+        selectedUpdateImagePath = pc.getImagePath();
+        imagePreviewer.preview(updateProductPreview, selectedUpdateImagePath, 200, 170);
+
+        // show update card
+        java.awt.CardLayout cl = (java.awt.CardLayout) SmartProductPanel.getLayout();
+        cl.show(SmartProductPanel, CARD_UPDATE);
+        SmartProductPanel.revalidate();
+        SmartProductPanel.repaint();
+
     }//GEN-LAST:event_UpdateProductBtnActionPerformed
 
     private void RemoveProdductBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RemoveProdductBtnActionPerformed
-   
+
     }//GEN-LAST:event_RemoveProdductBtnActionPerformed
 
     private void updateProductBrowseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateProductBrowseActionPerformed
-    
+        String path = imagePreviewer.chooseImage(this);
+        if (path == null) {
+            return;
+        }
+
+        selectedUpdateImagePath = path;
+        imagePreviewer.preview(updateProductPreview, selectedUpdateImagePath, 200, 170);
     }//GEN-LAST:event_updateProductBrowseActionPerformed
 
     private void ConfirmUpdateBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ConfirmUpdateBtnActionPerformed
-        
+
+        if (selectedForUpdate == null) {
+            javax.swing.JOptionPane.showMessageDialog(this, "No product selected.");
+            return;
+        }
+
+        String type = (String) CompTypeCombobox.getSelectedItem();
+        int qty = ((Integer) updateProductQtySpinner.getValue()).intValue();
+
+        double price;
+        try {
+            price = Double.parseDouble(updatePriceField.getText().trim());
+        } catch (Exception ex) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Invalid price.");
+            return;
+        }
+
+        selectedForUpdate.setType(type);
+        selectedForUpdate.setQuantity(qty);
+        selectedForUpdate.setPrice(price);
+
+        if (qty > 0) {
+            selectedForUpdate.setStatus("Available");
+        } else {
+            selectedForUpdate.setStatus("Out of Stock");
+        }
+
+        if (selectedUpdateImagePath != null && selectedUpdateImagePath.trim().length() > 0) {
+            selectedForUpdate.setImagePath(selectedUpdateImagePath);
+        }
+
+        // refresh product table
+        productModel.fireTableDataChanged();
+
+        javax.swing.JOptionPane.showMessageDialog(this, "Product updated.");
+
+        // go back to product panel
+        java.awt.CardLayout cl = (java.awt.CardLayout) SmartProductPanel.getLayout();
+        cl.show(SmartProductPanel, CARD_PRODUCTS);
     }//GEN-LAST:event_ConfirmUpdateBtnActionPerformed
 
     private void updateCancelBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateCancelBtnActionPerformed
-        
+
     }//GEN-LAST:event_updateCancelBtnActionPerformed
 
     private void updateProductBackbtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateProductBackbtnActionPerformed
-      
+        java.awt.CardLayout cl = (java.awt.CardLayout) SmartProductPanel.getLayout();
+        cl.show(SmartProductPanel, CARD_PRODUCTS);
     }//GEN-LAST:event_updateProductBackbtnActionPerformed
 
     private void addProductBorwseBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addProductBorwseBtnActionPerformed
-    
+        String path = imagePreviewer.chooseImage(this);
+        if (path == null) {
+            return;
+        }
+
+        selectedAddImagePath = path;
+        imagePreviewer.preview(addProductPreview, selectedAddImagePath, 190, 170);
     }//GEN-LAST:event_addProductBorwseBtnActionPerformed
 
     private void addProductConfirmBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addProductConfirmBtnActionPerformed
-      
+
     }//GEN-LAST:event_addProductConfirmBtnActionPerformed
 
     private void addProductClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addProductClearActionPerformed
-  
+
     }//GEN-LAST:event_addProductClearActionPerformed
+
+    private void updateProductQtySpinnerStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_updateProductQtySpinnerStateChanged
+        Object v = updateProductQtySpinner.getValue();
+
+        int q;
+        if (v instanceof Integer) {
+            q = ((Integer) v).intValue();
+        } else {
+            // fallback (in case spinner model returns non-Integer)
+            try {
+                q = Integer.parseInt(String.valueOf(v));
+            } catch (Exception ex) {
+                q = 0;
+            }
+        }
+
+        if (q > 0) {
+            StatusField.setText("Available");
+        } else {
+            StatusField.setText("Out of Stock");
+        }
+
+    }//GEN-LAST:event_updateProductQtySpinnerStateChanged
 
     /**
      * @param args the command line arguments
@@ -472,7 +642,6 @@ public class Admin extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel AddProductPanel;
     private javax.swing.JTable AdminViewTable;
-    private javax.swing.JTable AdminViewTable1;
     private javax.swing.JComboBox<String> CompTypeCombobox;
     private javax.swing.JComboBox<String> CompTypeCombobox1;
     private javax.swing.JTextField ComponentPriceField;
@@ -480,6 +649,7 @@ public class Admin extends javax.swing.JFrame {
     private javax.swing.JButton LogoutBtn;
     private javax.swing.JPanel ProductPanel;
     private javax.swing.JButton RemoveProdductBtn;
+    private javax.swing.JTable RemovedProductTable;
     private javax.swing.JPanel SmartProductPanel;
     private javax.swing.JTextField StatusField;
     private javax.swing.JPanel UpdatePanel;
@@ -507,6 +677,7 @@ public class Admin extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel5;

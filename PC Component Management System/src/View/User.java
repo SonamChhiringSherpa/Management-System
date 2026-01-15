@@ -4,19 +4,70 @@
  */
 package View;
 
+import Controller.UserController;
+import Model.CartTableModel;
+import Model.Inventory;
+import Model.PCComponent;
+import Model.ProductTableModel;
+
 /**
  *
  * @author sonamchhiringsherpa
  */
 public class User extends javax.swing.JFrame {
-    
+
+    // Controller (logic)
+    private final UserController controller = new UserController();
+
+// Table models (UI data models)
+    private final ProductTableModel productModel = new ProductTableModel(240, 160);
+
+    private CartTableModel cartModel; // created after controller cart exists
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(User.class.getName());
+
+    private final Model.UserOrderTableModel orderModel = new Model.UserOrderTableModel();
+
+    private final Model.OrderDetailTableModel orderDetailModel = new Model.OrderDetailTableModel(80, 80);
 
     /**
      * Creates new form User
      */
     public User() {
         initComponents();
+        OrderTable.setModel(orderModel);         // Orders table (left)
+        ProductTable1.setModel(orderDetailModel); // Order Detail table (right)
+        // Order Detail table (right side) sizing
+        ProductTable1.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_SUBSEQUENT_COLUMNS);
+
+// Keep image column fixed width
+        ProductTable1.getColumnModel().getColumn(0).setMinWidth(120);
+        ProductTable1.getColumnModel().getColumn(0).setPreferredWidth(120);
+        ProductTable1.getColumnModel().getColumn(0).setMaxWidth(120);
+
+        ProductTable1.setRowHeight(90);// must be >= your OrderDetailTableModel thumbH (80)
+        ProductTable1.getColumnModel().getColumn(0).setPreferredWidth(120); // image column
+
+        // Make sure dummy inventory exists
+        Inventory.initDummyDataIfEmpty();
+
+        // PRODUCT TABLE SETUP
+        ProductTable.setModel(productModel);
+
+// row height should be >= thumbnail height
+        ProductTable.setRowHeight(180);
+
+// make image column wider
+        ProductTable.getColumnModel().getColumn(5).setPreferredWidth(300);
+
+        productModel.setData(controller.getInventory());
+
+        // CART TABLE SETUP
+        cartModel = new CartTableModel(controller.getCart(), 80, 80);
+        CartTable.setModel(cartModel);
+        CartTable.setRowHeight(100);
+
+        // (Optional) default placeholder text behavior
+        searchField.setText("Search");
     }
 
     /**
@@ -49,10 +100,11 @@ public class User extends javax.swing.JFrame {
         CartPanel = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         CartTable = new javax.swing.JTable();
-        OrderBtn = new javax.swing.JButton();
+        updateCartOrder = new javax.swing.JButton();
+        OrderBtn1 = new javax.swing.JButton();
         OrderPanel = new javax.swing.JPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        OrderTable = new javax.swing.JTable();
         ViewOrderDetails = new javax.swing.JButton();
         jScrollPane4 = new javax.swing.JScrollPane();
         ProductTable1 = new javax.swing.JTable();
@@ -66,12 +118,21 @@ public class User extends javax.swing.JFrame {
         jLabel2.setFont(new java.awt.Font("Kannada Sangam MN", 1, 36)); // NOI18N
         jLabel2.setText("PC Hardware Vault");
         jPanel1.add(jLabel2);
-        jLabel2.setBounds(60, 30, 590, 59);
+        jLabel2.setBounds(60, 30, 590, 47);
 
         LogoutBtn.setFont(new java.awt.Font("Helvetica Neue", 0, 18)); // NOI18N
         LogoutBtn.setText("Logout");
+        LogoutBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                LogoutBtnActionPerformed(evt);
+            }
+        });
         jPanel1.add(LogoutBtn);
         LogoutBtn.setBounds(1160, 30, 90, 50);
+
+        jTabbedPane1.setBackground(new java.awt.Color(255, 255, 255));
+
+        HomePanel.setBackground(new java.awt.Color(255, 255, 255));
 
         javax.swing.GroupLayout HomePanelLayout = new javax.swing.GroupLayout(HomePanel);
         HomePanel.setLayout(HomePanelLayout);
@@ -81,11 +142,12 @@ public class User extends javax.swing.JFrame {
         );
         HomePanelLayout.setVerticalGroup(
             HomePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 703, Short.MAX_VALUE)
+            .addGap(0, 715, Short.MAX_VALUE)
         );
 
         jTabbedPane1.addTab("Home", HomePanel);
 
+        ProductPanel.setBackground(new java.awt.Color(255, 255, 255));
         ProductPanel.setLayout(null);
 
         FilterPanel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
@@ -181,7 +243,7 @@ public class User extends javax.swing.JFrame {
         );
 
         ProductPanel.add(FilterPanel);
-        FilterPanel.setBounds(20, 10, 1040, 93);
+        FilterPanel.setBounds(20, 10, 1040, 92);
 
         addToCart.setText("Add to Cart");
         addToCart.addActionListener(new java.awt.event.ActionListener() {
@@ -210,6 +272,7 @@ public class User extends javax.swing.JFrame {
 
         jTabbedPane1.addTab("Product", ProductPanel);
 
+        CartPanel.setBackground(new java.awt.Color(255, 255, 255));
         CartPanel.setLayout(null);
 
         CartTable.setModel(new javax.swing.table.DefaultTableModel(
@@ -220,7 +283,7 @@ public class User extends javax.swing.JFrame {
                 {null, null, null, null, null}
             },
             new String [] {
-                "Name", "Component Type", "Quantity", "Price", "Image"
+                "Image", "Name", "Quantity", "Price", "Total"
             }
         ));
         jScrollPane2.setViewportView(CartTable);
@@ -228,20 +291,30 @@ public class User extends javax.swing.JFrame {
         CartPanel.add(jScrollPane2);
         jScrollPane2.setBounds(10, 40, 1040, 550);
 
-        OrderBtn.setText("Order");
-        OrderBtn.addActionListener(new java.awt.event.ActionListener() {
+        updateCartOrder.setText("Update Order");
+        updateCartOrder.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                OrderBtnActionPerformed(evt);
+                updateCartOrderActionPerformed(evt);
             }
         });
-        CartPanel.add(OrderBtn);
-        OrderBtn.setBounds(1080, 40, 150, 40);
+        CartPanel.add(updateCartOrder);
+        updateCartOrder.setBounds(1080, 100, 150, 40);
+
+        OrderBtn1.setText("Order");
+        OrderBtn1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                OrderBtn1ActionPerformed(evt);
+            }
+        });
+        CartPanel.add(OrderBtn1);
+        OrderBtn1.setBounds(1080, 40, 150, 40);
 
         jTabbedPane1.addTab("Cart", CartPanel);
 
+        OrderPanel.setBackground(new java.awt.Color(255, 255, 255));
         OrderPanel.setLayout(null);
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        OrderTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null},
                 {null, null, null, null, null},
@@ -252,7 +325,7 @@ public class User extends javax.swing.JFrame {
                 "OrderId", "Date", "Location", "Status", "Total Amount"
             }
         ));
-        jScrollPane3.setViewportView(jTable1);
+        jScrollPane3.setViewportView(OrderTable);
 
         OrderPanel.add(jScrollPane3);
         jScrollPane3.setBounds(10, 50, 680, 290);
@@ -274,7 +347,7 @@ public class User extends javax.swing.JFrame {
                 {null, null, null, null, null}
             },
             new String [] {
-                "Name", "Component Type", "Quantity", "Price", "Image"
+                "Image", "Name", "Quantity", "Price", "Total"
             }
         ));
         jScrollPane4.setViewportView(ProductTable1);
@@ -285,12 +358,12 @@ public class User extends javax.swing.JFrame {
         jLabel1.setFont(new java.awt.Font("Helvetica Neue", 0, 14)); // NOI18N
         jLabel1.setText("Order Detial");
         OrderPanel.add(jLabel1);
-        jLabel1.setBounds(710, 20, 90, 18);
+        jLabel1.setBounds(710, 20, 90, 19);
 
         jLabel5.setFont(new java.awt.Font("Helvetica Neue", 0, 14)); // NOI18N
         jLabel5.setText("Orders");
         OrderPanel.add(jLabel5);
-        jLabel5.setBounds(20, 20, 60, 18);
+        jLabel5.setBounds(20, 20, 60, 19);
 
         jTabbedPane1.addTab("Orders", OrderPanel);
 
@@ -298,52 +371,249 @@ public class User extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jTabbedPane1, javax.swing.GroupLayout.Alignment.TRAILING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 1325, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTabbedPane1)
-                .addContainerGap())
+                .addGap(2, 2, 2)
+                .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void sortByNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sortByNameActionPerformed
-      
+// Sort by name and refresh table with sorted copy
+        productModel.setData(controller.sortByName());
     }//GEN-LAST:event_sortByNameActionPerformed
 
     private void sortByPriceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sortByPriceActionPerformed
-   
+        // Sort by price and refresh table with sorted copy
+        productModel.setData(controller.sortByPrice());
     }//GEN-LAST:event_sortByPriceActionPerformed
 
     private void searchFieldMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_searchFieldMouseClicked
-  
+        // Clear placeholder text only once
+        if ("Search".equals(searchField.getText())) {
+            searchField.setText("");
+        }
     }//GEN-LAST:event_searchFieldMouseClicked
 
     private void searchBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchBtnActionPerformed
-       
+        String text = searchField.getText();
+
+        // If empty -> show all products
+        if (text == null || text.trim().isEmpty() || "Search".equalsIgnoreCase(text.trim())) {
+            productModel.setData(controller.getInventory());
+            return;
+        }
+
+        // Linear search and update table with results
+        java.util.LinkedList<PCComponent> results = controller.searchByNameLinear(text);
+
+        if (results.isEmpty()) {
+            javax.swing.JOptionPane.showMessageDialog(this, "No matching products found.");
+            productModel.setData(controller.getInventory());
+            return;
+        }
+
+        productModel.setData(results);
     }//GEN-LAST:event_searchBtnActionPerformed
 
     private void filterBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_filterBtnActionPerformed
-       
+// Filter table by selected component type
+        String type = componentList_combobox.getSelectedItem().toString();
+        productModel.setData(controller.filterByType(type));
     }//GEN-LAST:event_filterBtnActionPerformed
 
     private void addToCartActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addToCartActionPerformed
-        
+        int viewRow = ProductTable.getSelectedRow();
+        if (viewRow == -1) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Please select a product first.");
+            return;
+        }
+
+        int modelRow = ProductTable.convertRowIndexToModel(viewRow);
+
+        PCComponent selected = productModel.getAt(modelRow);
+
+// limit quantity by available stock
+        int maxQty = selected.getQuantity();
+        if (maxQty <= 0) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Out of stock!");
+            return;
+        }
+
+// Description text (adjust to what you have; if no description, show name/type/price)
+        String desc = "Name: " + selected.getName()
+                + "\nType: " + selected.getType()
+                + "\nPrice: " + selected.getPrice()
+                + "\nAvailable: " + selected.getQuantity();
+
+        javax.swing.JSpinner spinner = new javax.swing.JSpinner(
+                new javax.swing.SpinnerNumberModel(1, 1, maxQty, 1)
+        );
+
+        javax.swing.JPanel panel = new javax.swing.JPanel(new java.awt.BorderLayout(10, 10));
+        panel.add(new javax.swing.JLabel("<html>" + desc.replace("\n", "<br>") + "</html>"),
+                java.awt.BorderLayout.CENTER);
+
+        javax.swing.JPanel qtyPanel = new javax.swing.JPanel();
+        qtyPanel.add(new javax.swing.JLabel("Quantity: "));
+        qtyPanel.add(spinner);
+        panel.add(qtyPanel, java.awt.BorderLayout.SOUTH);
+
+        int result = javax.swing.JOptionPane.showConfirmDialog(
+                this, panel, "Add to cart",
+                javax.swing.JOptionPane.OK_CANCEL_OPTION,
+                javax.swing.JOptionPane.PLAIN_MESSAGE
+        );
+
+        if (result != javax.swing.JOptionPane.OK_OPTION) {
+            return;
+        }
+
+        int qty = (Integer) spinner.getValue();
+
+// Do the real update in controller
+        boolean ok = controller.addToCartAndDecreaseStock(selected, qty);
+
+        if (!ok) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Not enough stock!");
+            return;
+        }
+
+// refresh both tables
+        cartModel.refresh();
+        productModel.fireTableDataChanged();
+
     }//GEN-LAST:event_addToCartActionPerformed
 
-    private void OrderBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_OrderBtnActionPerformed
-        
-    }//GEN-LAST:event_OrderBtnActionPerformed
+    private void updateCartOrderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateCartOrderActionPerformed
+        int row = CartTable.getSelectedRow();
+        if (row == -1) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Select a cart item first.");
+            return;
+        }
+
+        int modelRow = CartTable.convertRowIndexToModel(row);
+
+        // Read current values from CartTableModel
+        Model.CartItem item = controller.getCart().getAt(modelRow);
+        Model.PCComponent p = item.getProduct();
+
+        int oldQty = item.getQty();
+
+        // Max allowed = current cart qty + inventory qty
+        int maxQty = oldQty + p.getQuantity();
+
+        String desc = "Name: " + p.getName()
+                + "\nType: " + p.getType()
+                + "\nPrice: " + p.getPrice()
+                + "\nIn inventory: " + p.getQuantity()
+                + "\nIn cart: " + oldQty;
+
+        javax.swing.JSpinner spinner = new javax.swing.JSpinner(
+                new javax.swing.SpinnerNumberModel(oldQty, 0, maxQty, 1)
+        );
+
+        javax.swing.JPanel panel = new javax.swing.JPanel(new java.awt.BorderLayout(10, 10));
+        panel.add(new javax.swing.JLabel("<html>" + desc.replace("\n", "<br>") + "</html>"),
+                java.awt.BorderLayout.CENTER);
+
+        javax.swing.JPanel qtyPanel = new javax.swing.JPanel();
+        qtyPanel.add(new javax.swing.JLabel("New quantity: "));
+        qtyPanel.add(spinner);
+        panel.add(qtyPanel, java.awt.BorderLayout.SOUTH);
+
+        int result = javax.swing.JOptionPane.showConfirmDialog(
+                this, panel, "Update cart item",
+                javax.swing.JOptionPane.OK_CANCEL_OPTION,
+                javax.swing.JOptionPane.PLAIN_MESSAGE
+        );
+
+        if (result != javax.swing.JOptionPane.OK_OPTION) {
+            return;
+        }
+
+        int newQty = (Integer) spinner.getValue();
+
+        boolean ok = controller.updateCartItemQty(modelRow, newQty);
+        if (!ok) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Not enough stock to increase quantity.");
+            return;
+        }
+
+        // Refresh tables
+        cartModel.refresh();
+        productModel.fireTableDataChanged();
+    }//GEN-LAST:event_updateCartOrderActionPerformed
 
     private void ViewOrderDetailsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ViewOrderDetailsActionPerformed
-   
+        int viewRow = OrderTable.getSelectedRow();
+        if (viewRow == -1) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Select an order first.");
+            return;
+        }
+
+        int modelRow = OrderTable.convertRowIndexToModel(viewRow);
+
+        Model.Order o = orderModel.getOrderAtRow(modelRow);
+        if (o == null) {
+            return;
+        }
+
+        orderDetailModel.setItems(o.getItems());
     }//GEN-LAST:event_ViewOrderDetailsActionPerformed
+
+    private void OrderBtn1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_OrderBtn1ActionPerformed
+        javax.swing.JTextField locationField = new javax.swing.JTextField(25);
+
+        javax.swing.JPanel panel = new javax.swing.JPanel(new java.awt.BorderLayout(10, 10));
+        panel.add(new javax.swing.JLabel("Enter delivery location:"), java.awt.BorderLayout.NORTH);
+        panel.add(locationField, java.awt.BorderLayout.CENTER);
+
+        int result = javax.swing.JOptionPane.showConfirmDialog(
+                this,
+                panel,
+                "Place Order",
+                javax.swing.JOptionPane.OK_CANCEL_OPTION,
+                javax.swing.JOptionPane.PLAIN_MESSAGE
+        ); // dialog input [web:257]
+
+        if (result != javax.swing.JOptionPane.OK_OPTION) {
+            return;
+        }
+
+        String location = locationField.getText();
+
+        Model.Order created = controller.placeOrder(location);
+        if (created == null) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Cart is empty or location is invalid.");
+            return;
+        }
+
+        String msg = "OrderId: " + created.getOrderId()
+                + "\nDate: " + created.getDate()
+                + "\nLocation: " + created.getLocation()
+                + "\nTotal Amount: " + created.getTotalAmount();
+
+        javax.swing.JOptionPane.showMessageDialog(this, msg);
+
+        // Refresh tables
+        orderModel.refresh();
+        cartModel.refresh();             // cart cleared
+        orderDetailModel.setItems(null); // clear right table until user selects an order
+    }//GEN-LAST:event_OrderBtn1ActionPerformed
+
+    private void LogoutBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LogoutBtnActionPerformed
+        Model.UserSession.logout(); // does NOT delete carts from repository
+        this.dispose();
+        new View.Login().setVisible(true);
+    }//GEN-LAST:event_LogoutBtnActionPerformed
 
     /**
      * @param args the command line arguments
@@ -370,14 +640,16 @@ public class User extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(() -> new User().setVisible(true));
     }
 
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel CartPanel;
     private javax.swing.JTable CartTable;
     private javax.swing.JPanel FilterPanel;
     private javax.swing.JPanel HomePanel;
     private javax.swing.JButton LogoutBtn;
-    private javax.swing.JButton OrderBtn;
+    private javax.swing.JButton OrderBtn1;
     private javax.swing.JPanel OrderPanel;
+    private javax.swing.JTable OrderTable;
     private javax.swing.JPanel ProductPanel;
     private javax.swing.JTable ProductTable;
     private javax.swing.JTable ProductTable1;
@@ -396,10 +668,10 @@ public class User extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JTabbedPane jTabbedPane1;
-    private javax.swing.JTable jTable1;
     private javax.swing.JButton searchBtn;
     private javax.swing.JTextField searchField;
     private javax.swing.JButton sortByName;
     private javax.swing.JButton sortByPrice;
+    private javax.swing.JButton updateCartOrder;
     // End of variables declaration//GEN-END:variables
 }
